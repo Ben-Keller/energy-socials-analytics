@@ -10,7 +10,7 @@ class Links(HTMLParser):
    if k in ('src','href') and v and not v.startswith(('#','http:','https:','data:','mailto:')):self.links.append(v.split('#')[0].split('?')[0])
 p=Links();p.feed((root/'index.html').read_text())
 missing=[v for v in p.links if not (root/v).is_file()]
-script=(root/'assets/data.js').read_text();data=json.loads(script.split('window.REPORT_DATA=',1)[1].split(';\nwindow.FIGURE_CATALOG=',1)[0])
+data=json.loads((root.parent/'web/data/source.json').read_text())
 for post in data['posts']:
  for key in ['embedded','image']:
   if post.get(key) and not (root/post[key]).is_file(): missing.append(post[key])
@@ -33,3 +33,13 @@ with zipfile.ZipFile(root/'Riad_Meddeb_Expanded_Dataset.xlsx') as z:
  targets=[el.get('Target') for n in z.namelist() if n.endswith('.rels') for el in ET.fromstring(z.read(n)) if el.get('TargetMode')=='External']
  assert all(t.startswith(('http:','https:')) or (root/t).is_file() for t in targets)
 print('PASS: entry-point assets, 277 records, 276 visuals with verified responsive WebP thumbnails, original image paths, 30 SVG/PNG pairs, workbook links and GitHub file-size limits.')
+
+compact=json.loads((root/'data/posts.json').read_text())
+assert len(compact['posts'])==277
+assert len({p['id'] for p in compact['posts']})==277
+assert all('caption' not in p and 'baseline' not in p for p in compact['posts'])
+assert (root/'data/posts.json').stat().st_size<250000
+assert len(list((root/'data/posts').glob('*.json')))==277
+assert len(json.loads((root.parent/'web/src/catalog.json').read_text()))==22
+assert 'd3-' not in (root/'index.html').read_text()
+print('PASS: unique atlas records, separate captions, initial metadata budget, 22 deferred analyses and no eager D3 bundle.')

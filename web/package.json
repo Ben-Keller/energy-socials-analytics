@@ -1,0 +1,1 @@
+{"name":"energy-socials-analytics","private":true,"type":"module","scripts":{"build":"python3 prepare.py && vite build"},"dependencies":{"d3":"7.9.0","lit":"3.3.1"},"devDependencies":{"vite":"7.1.7"}}
