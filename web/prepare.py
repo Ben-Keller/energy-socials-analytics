@@ -37,4 +37,7 @@ print('Prepared',len(compact),'posts and',len(catalog),'lazy analysis charts')
 entry=here/'index.html'
 html=entry.read_text();html=re.sub(r'<link[^>]+data-atlas-preload[^>]*>','',html)
 html=html.replace('</head>',f'<link data-atlas-preload rel="preload" as="image" href="{sprite["src"]}" fetchpriority="high"></head>')
+html=re.sub(r'<script id="atlas-data" type="application/json">.*?</script>','',html,flags=re.S)
+payload=(out/'data/posts.json').read_text().replace('<',chr(92)+'u003c')
+html=html.replace('</body>','<script id="atlas-data" type="application/json">'+payload+'</script></body>')
 entry.write_text(html)

@@ -41,7 +41,7 @@ assert all('caption' not in p and 'baseline' not in p for p in compact['posts'])
 assert (root/'data/posts.json').stat().st_size<250000
 assert len(list((root/'data/posts').glob('*.json')))==277
 assert len(json.loads((root.parent/'web/src/catalog.json').read_text()))==16
-assert 'd3-' not in (root/'index.html').read_text()
+assert not any('assets/d3-' in link for link in p.links)
 print('PASS: unique atlas records, separate captions, initial metadata budget, 16 deferred analyses and no eager D3 bundle.')
 
 metadata=compact['sprite'];sprite=root/metadata['src']
@@ -54,3 +54,7 @@ assert all(0<=x<metadata['cols'] and 0<=y<metadata['rows'] for x,y in coords)
 assert metadata['src'] in (root/'index.html').read_text()
 assert all(f['number']<24 for f in json.loads((root.parent/'web/src/catalog.json').read_text()))
 print('PASS: 276 unique sprite cells in one preloaded WebP; analysis ends at figure 23.')
+
+inline=re.search(r'<script id="atlas-data" type="application/json">(.*?)</script>',(root/'index.html').read_text(),re.S)
+assert inline and json.loads(inline.group(1))==compact
+print('PASS: initial post metadata embedded safely in HTML; no startup metadata request required.')
