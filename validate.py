@@ -40,6 +40,17 @@ assert len({p['id'] for p in compact['posts']})==277
 assert all('caption' not in p and 'baseline' not in p for p in compact['posts'])
 assert (root/'data/posts.json').stat().st_size<250000
 assert len(list((root/'data/posts').glob('*.json')))==277
-assert len(json.loads((root.parent/'web/src/catalog.json').read_text()))==22
+assert len(json.loads((root.parent/'web/src/catalog.json').read_text()))==16
 assert 'd3-' not in (root/'index.html').read_text()
-print('PASS: unique atlas records, separate captions, initial metadata budget, 22 deferred analyses and no eager D3 bundle.')
+print('PASS: unique atlas records, separate captions, initial metadata budget, 16 deferred analyses and no eager D3 bundle.')
+
+metadata=compact['sprite'];sprite=root/metadata['src']
+with Image.open(sprite) as sheet:
+ assert sheet.format=='WEBP'
+ assert sheet.size==(metadata['cols']*metadata['cell'],metadata['rows']*metadata['cell'])
+coords=[tuple(p['sprite']) for p in compact['posts'] if p['image']]
+assert len(coords)==len(set(coords))==276
+assert all(0<=x<metadata['cols'] and 0<=y<metadata['rows'] for x,y in coords)
+assert metadata['src'] in (root/'index.html').read_text()
+assert all(f['number']<24 for f in json.loads((root.parent/'web/src/catalog.json').read_text()))
+print('PASS: 276 unique sprite cells in one preloaded WebP; analysis ends at figure 23.')
