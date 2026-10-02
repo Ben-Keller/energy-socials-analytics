@@ -34,3 +34,5 @@
 
 /* Keep long-page navigation stable during responsive redraws. */
 html{scroll-behavior:auto;overflow-anchor:none}.toolbar{backdrop-filter:none;-webkit-backdrop-filter:none;background:#F4F7FB}.figure{contain-intrinsic-size:none}
+
+.heroart img{height:auto}.dialoggrid img{height:auto}.postcard img,.explore-mosaic img,.record-row img{max-width:100%}

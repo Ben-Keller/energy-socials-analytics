@@ -37,6 +37,8 @@
 /* Keep long-page navigation stable during responsive redraws. */
 html{scroll-behavior:auto;overflow-anchor:none}.toolbar{backdrop-filter:none;-webkit-backdrop-filter:none;background:#F4F7FB}.figure{contain-intrinsic-size:none}
 
+.heroart img{height:auto}.dialoggrid img{height:auto}.postcard img,.explore-mosaic img,.record-row img{max-width:100%}
+
 /* Mobile reading layout; chart geometry and analytical samples stay unchanged. */
 body{overflow-wrap:break-word}main{min-width:0}.skip-link{position:absolute;left:16px;top:-70px;z-index:100;background:white;padding:12px}.skip-link:focus{top:12px}.topbar{border-top:7px solid #00689D}.topbar nav{display:flex;gap:20px}.topbar a{margin:0}button,select,input,a.button{min-height:44px}button{touch-action:manipulation}.svgstage{touch-action:pan-x pan-y;position:relative}.svgstage svg{max-width:none}.librarypager{display:flex;justify-content:center;align-items:center;gap:16px;margin:28px 0}.librarypager span{font-size:14px}.library-empty{padding:30px;background:white;border:1px solid var(--line)}dialog{overscroll-behavior:contain}body:has(dialog[open]){overflow:hidden}.dialoggrid>div{min-width:0}dialog .close{position:sticky;top:0;z-index:2;background:white}.postcard .meta{overflow-wrap:anywhere}.postcard:hover{box-shadow:0 6px 20px #10253F15}.postcard:focus-visible{outline-offset:2px}.mobile-nav{display:none}.sectiontitle{scroll-margin-top:140px}
 @media(min-width:751px){}
