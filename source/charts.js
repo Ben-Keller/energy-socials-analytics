@@ -1,5 +1,5 @@
 /* D3 7.9.0 is the only chart renderer. Every report SVG is produced here in the HTML. */
-const D=JSON.parse(document.querySelector('#report-data').textContent), F=JSON.parse(document.querySelector('#figure-catalog').textContent).filter(f=>f.id!=='f17');
+const D=JSON.parse(document.querySelector('#report-data').textContent), F=JSON.parse(document.querySelector('#figure-catalog').textContent).filter(f=>!['f17','f18'].includes(f.id));
 const S=D.originalAnalysis,P=D.posts,A=D.originalRecords,C=A.filter(d=>d.caption_eligible),R=A.filter(d=>d.ranking_eligible);
 const ink='#10253F',muted='#485B70',grid='#D9E2EB',blue='#00689D',red='#E5243B',paper='#FFFFFF';
 const TN=S.topic_names,AN=S.approach_names, topics=Object.keys(TN), approaches=Object.keys(AN), years=['2023','2024','2025','2026'];
