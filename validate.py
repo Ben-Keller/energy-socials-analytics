@@ -6,7 +6,7 @@ class Links(HTMLParser):
  def __init__(self): super().__init__();self.links=[]
  def handle_starttag(self,tag,attrs):
   for k,v in attrs:
-   if k in ('src','href') and v and not v.startswith(('#','http:','https:','data:','mailto:')):self.links.append(v.split('#')[0])
+   if k in ('src','href') and v and not v.startswith(('#','http:','https:','data:','mailto:')):self.links.append(v.split('#')[0].split('?')[0])
 p=Links();p.feed((root/'index.html').read_text())
 missing=[v for v in p.links if not (root/v).is_file()]
 script=(root/'assets/data.js').read_text();data=json.loads(script.split('window.REPORT_DATA=',1)[1].split(';\nwindow.FIGURE_CATALOG=',1)[0])

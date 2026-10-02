@@ -1,5 +1,5 @@
 from pathlib import Path
-import json,re,base64,shutil
+import json,re,base64,shutil,hashlib
 O=Path('outputs/linkedin_audit_20261002'); root=Path('github-pages'); site=root/'site'; assets=site/'assets';assets.mkdir(parents=True,exist_ok=True)
 s=(O/'Visual_Gallery.html').read_text();data=json.loads((O/'visual_assets/d3_report_data.json').read_text());count=0
 for p in data['posts']:
@@ -21,6 +21,8 @@ s=re.sub(r'<style>.*?</style>','<link rel="stylesheet" href="assets/styles.css">
 s=s.replace('</head>','<script defer src="assets/d3.min.js"></script><script defer src="assets/data.js"></script><script defer src="assets/app.js"></script></head>')
 s=s.replace('This page and the linked files work offline when kept together.','Downloadable files accompany this interactive gallery.')
 s=s.replace('</body>','<noscript><p>This interactive gallery requires JavaScript. You can still download the Word report and spreadsheet using the links above.</p></noscript></body>')
+for asset in ['app.js','styles.css','data.js']:
+ s=s.replace('assets/'+asset,'assets/'+asset+'?v='+hashlib.sha256((assets/asset).read_bytes()).hexdigest()[:12])
 (site/'index.html').write_text(s);(site/'Visual_Gallery.html').write_text('<!doctype html><meta charset="utf-8"><title>Visual gallery</title><script>location.replace("./index.html"+location.search+location.hash)</script><a href="./index.html">Open the gallery</a>');(site/'.nojekyll').touch()
 for name in ['post_images','d3_figures']:
  shutil.copytree(O/name,site/name,dirs_exist_ok=True)
