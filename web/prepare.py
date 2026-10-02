@@ -1,25 +1,15 @@
 from pathlib import Path
-import json,re
-import hashlib
+import json
 here=Path(__file__).parent;root=here.parent;source=root/'source';out=root/'site'
-raw=(here/'data/source.json').read_text();data=json.loads(raw);catalog=json.loads((here/'data/catalog.json').read_text())
-(here/'src/revision.js').write_text('export const revision="'+hashlib.sha256((raw+(here/'data/sprite.json').read_text()+Path(__file__).read_text()).encode()).hexdigest()[:12]+'";')
-for pattern in ['index-*.js','index-*.css','analysis-*.js','analysis-*.css','d3-*.js']:
- for stale in (out/'assets').glob(pattern):stale.unlink()
-(out/'data/posts').mkdir(parents=True,exist_ok=True)
-sprite=json.loads((here/'data/sprite.json').read_text())
-compact=[]
+data=json.loads((here/'data/source.json').read_text());catalog=json.loads((here/'data/catalog.json').read_text());images=json.loads((here/'data/image-packs.json').read_text())
+keys=['id','index','date','year','month','title','caption','sharedText','words','topic','approach','type','reactions','comments','liveReactions','liveComments','rank','original','source','image','width','height','palette']
+posts=[]
 for p in data['posts']:
- (out/f'data/posts/{p["index"]}.json').write_text(json.dumps({k:p.get(k) for k in ['caption','sharedText','source','dateBasis','imageBasis']},separators=(',',':')))
- compact.append({**{k:v for k,v in p.items() if k not in ['caption','sharedText','baseline','embedded','thumb','traits','thumbnails']},'sprite':sprite['positions'].get(p['id']),'preview':p.get('thumbnails',[{}])[-1].get('src') if p.get('thumbnails') else None})
-(out/'data/posts.json').write_text(json.dumps({'posts':compact,'colors':data['colors'],'sprite':{k:v for k,v in sprite.items() if k!='positions'}},separators=(',',':')))
-(out/'data/search.json').write_text(json.dumps({p['id']:(p.get('caption','')+' '+p.get('sharedText','')) for p in data['posts']},separators=(',',':')))
-analysis={**data,'posts':[],'originalRecords':[{k:r[k] for k in ['activity_id','caption_eligible','ranking_eligible']} for r in data['originalRecords']]}
-for post in data['posts']:
- row={k:v for k,v in post.items() if k not in ['embedded','thumb','thumbnails','traits']}
- if row.get('baseline'):row['baseline']={k:row['baseline'].get(k) for k in ['topic_tags','ai_mention','question_any','question_opening','external_link','first_person']}
- analysis['posts'].append(row)
-(out/'data/analysis.json').write_text(json.dumps(analysis,separators=(',',':')))
+ row={k:p.get(k) for k in keys};row.update(images['posts'].get(p['id'],{}));row['preview']=p.get('thumbnails',[{}])[-1].get('src') if p.get('thumbnails') else None
+ if p.get('baseline'):row['baseline']={k:p['baseline'].get(k) for k in ['topic_tags','ai_mention','question_any','question_opening','external_link','first_person']}
+ posts.append(row)
+siteData={'posts':posts,'colors':data['colors'],'sprite':images['low'],'originalAnalysis':{k:data['originalAnalysis'][k] for k in ['topic_names','approach_names','tag_counts']},'originalRecords':[{k:r[k] for k in ['activity_id','caption_eligible','ranking_eligible']} for r in data['originalRecords']]}
+(here/'src/site-data.json').write_text(json.dumps(siteData,separators=(',',':')))
 omit=['f06','f17','f18','f19','f20','f21','f22','f30'];catalog=[f for f in catalog if f['id'] not in omit and f['number']<24]
 (here/'src/catalog.json').write_text(json.dumps(catalog,separators=(',',':')))
 charts=(source/'charts.js').read_text();charts=charts.replace("JSON.parse(document.querySelector('#report-data').textContent)",'data').replace("JSON.parse(document.querySelector('#figure-catalog').textContent)",'catalog')
@@ -32,12 +22,5 @@ inter=inter.replace('v.draw();explorers.push(v);','lastWidth=Math.round(host.nod
 inter=inter.replace('new ResizeObserver(entries=>','const observer=new ResizeObserver(entries=>').replace('}).observe(host.node());','});observer.observe(host.node());')
 (here/'src/analysis.js').write_text("import * as d3 from 'd3';\nimport catalog from './catalog.json';\nexport function createAnalysis(data,showPost){\n"+charts+'\nfunction saveBlob(blob,name){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}\n'+inter+'\nreturn setupExplorer;\n}')
 (here/'src/analysis.css').write_text((source/'interactive.css').read_text())
-print('Prepared',len(compact),'posts and',len(catalog),'lazy analysis charts')
 
-entry=here/'index.html'
-html=entry.read_text();html=re.sub(r'<link[^>]+data-atlas-preload[^>]*>','',html)
-html=html.replace('</head>',f'<link data-atlas-preload rel="preload" as="image" href="{sprite["src"]}" fetchpriority="high"></head>')
-html=re.sub(r'<script id="atlas-data" type="application/json">.*?</script>','',html,flags=re.S)
-payload=(out/'data/posts.json').read_text().replace('<',chr(92)+'u003c')
-html=html.replace('</body>','<script id="atlas-data" type="application/json">'+payload+'</script></body>')
-entry.write_text(html)
+print('Prepared static page:',len(posts),'posts;',len(catalog),'analyses')

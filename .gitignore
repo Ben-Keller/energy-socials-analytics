@@ -3,3 +3,6 @@ __pycache__/
 *.pyc
 
 web/node_modules/
+
+web/dist/
+web/.astro/

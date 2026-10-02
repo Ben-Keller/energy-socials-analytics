@@ -5,3 +5,7 @@
 .post-thumb{display:block;width:100%;height:100%;background-image:var(--atlas-image);background-size:var(--atlas-size);background-repeat:no-repeat;pointer-events:none}
 
 post-image{display:block}.dialog-visual{position:relative;width:min(100%,65vh);aspect-ratio:1;margin:0 auto;background:white;overflow:hidden}.dialog-visual .instant-preview{position:absolute;inset:0}.dialog-visual .detail-preview{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:white}@media(max-width:700px){.dialog-visual{width:min(100%,38vh)}}
+.post-atlas{display:block;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 15px 60px #18344206}[hidden]{display:none!important}.static-atlas{display:grid;grid-template-columns:repeat(auto-fill,minmax(65px,1fr));gap:8px;padding:12px}.static-atlas .post-icon{position:relative;transform:none!important;width:100%;aspect-ratio:1}.static-group{grid-column:1/-1;font-size:13px;display:flex;justify-content:space-between;margin:14px 0}.static-group small{font-weight:normal;color:var(--muted)}.post-icon{transition:transform .12s ease,width .12s ease,height .12s ease}.atlas-inspector{contain:layout style}.figure[data-ready=true]{content-visibility:auto;contain-intrinsic-size:auto 800px}#dialog-image{min-width:0}.post-thumb{background-color:white}
+
+/* Reposition image tiles without animating hundreds of image layers. */
+.post-icon{transition:none;box-shadow:none;isolation:auto}

@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-03",
+  "baseline_public_atlas": {
+    "bytes": 1048876,
+    "transfer_seconds": 21.095
+  },
+  "replacement": {
+    "embedded_preview_bytes": 73370,
+    "entry_js_bytes": 14996,
+    "image_pack_count": 9,
+    "max_pack_bytes": 54378,
+    "caption_requests_on_open": 0
+  },
+  "local_browser": {
+    "fcp_ms": 448,
+    "lcp_ms": 448,
+    "cls": 0,
+    "first_layout_click_to_paint_ms": 177.7,
+    "layout_calculation_and_dom_ms": 1.5,
+    "notes": "Local server and warm assets; not a production or throttled Core Web Vitals certification."
+  },
+  "validation": {
+    "layout_combinations": 420,
+    "atlas_modes": 7,
+    "analysis_charts": 16,
+    "mobile_widths": [
+      320,
+      390
+    ],
+    "console_errors": 0,
+    "invalid_svg_geometry": 0
+  }
+}
