@@ -11,7 +11,7 @@ sprite=json.loads((here/'data/sprite.json').read_text())
 compact=[]
 for p in data['posts']:
  (out/f'data/posts/{p["index"]}.json').write_text(json.dumps({k:p.get(k) for k in ['caption','sharedText','source','dateBasis','imageBasis']},separators=(',',':')))
- compact.append({**{k:v for k,v in p.items() if k not in ['caption','sharedText','baseline','embedded','thumb','traits','thumbnails']},'sprite':sprite['positions'].get(p['id'])})
+ compact.append({**{k:v for k,v in p.items() if k not in ['caption','sharedText','baseline','embedded','thumb','traits','thumbnails']},'sprite':sprite['positions'].get(p['id']),'preview':p.get('thumbnails',[{}])[-1].get('src') if p.get('thumbnails') else None})
 (out/'data/posts.json').write_text(json.dumps({'posts':compact,'colors':data['colors'],'sprite':{k:v for k,v in sprite.items() if k!='positions'}},separators=(',',':')))
 (out/'data/search.json').write_text(json.dumps({p['id']:(p.get('caption','')+' '+p.get('sharedText','')) for p in data['posts']},separators=(',',':')))
 analysis={**data,'posts':[],'originalRecords':[{k:r[k] for k in ['activity_id','caption_eligible','ranking_eligible']} for r in data['originalRecords']]}
