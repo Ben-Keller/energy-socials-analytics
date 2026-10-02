@@ -17,6 +17,8 @@
 
 #f08 .metric-panel h3{color:#344957;border-color:#DCE2E7;border-bottom-width:1px}
 
+.library-sort{display:flex;align-items:center;gap:8px;font-size:13px;color:#52647A}.library-sort select{min-width:0;max-width:100%}.data-controls label:has(select[data-control="sort"]){flex-direction:row;align-items:center;gap:10px}.data-controls select[data-control="sort"]{min-width:190px;max-width:100%;font-weight:400}@media(max-width:500px){.data-controls label:has(select[data-control="sort"]){width:100%;flex-wrap:wrap}.data-controls select[data-control="sort"]{flex:1}.library-sort{width:100%}.library-sort select{flex:1}}
+
 /* Mobile reading layout; chart geometry and analytical samples stay unchanged. */
 body{overflow-wrap:break-word}main{min-width:0}.skip-link{position:absolute;left:16px;top:-70px;z-index:100;background:white;padding:12px}.skip-link:focus{top:12px}.topbar{border-top:7px solid #00689D}.topbar nav{display:flex;gap:20px}.topbar a{margin:0}button,select,input,a.button{min-height:44px}button{touch-action:manipulation}.svgstage{touch-action:pan-x pan-y;position:relative}.svgstage svg{max-width:none}.librarypager{display:flex;justify-content:center;align-items:center;gap:16px;margin:28px 0}.librarypager span{font-size:14px}.library-empty{padding:30px;background:white;border:1px solid var(--line)}dialog{overscroll-behavior:contain}body:has(dialog[open]){overflow:hidden}.dialoggrid>div{min-width:0}dialog .close{position:sticky;top:0;z-index:2;background:white}.postcard .meta{overflow-wrap:anywhere}.postcard:hover{box-shadow:0 6px 20px #10253F15}.postcard:focus-visible{outline-offset:2px}.mobile-nav{display:none}.sectiontitle{scroll-margin-top:140px}
 @media(min-width:751px){}

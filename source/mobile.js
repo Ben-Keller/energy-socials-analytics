@@ -2,6 +2,7 @@ document.querySelectorAll('.mobile-nav a').forEach(a=>a.addEventListener('click'
 if(/^#f\d{2}$/.test(location.hash)){requestAnimationFrame(()=>document.querySelector(location.hash)?.scrollIntoView({behavior:'auto'}));}
 // Visible segmented choices with one sliding selection highlight.
 function revealChoices(select){
+ if(select.dataset.control==='sort'||select.id==='sort')return;
  if(select.options.length===1){select.hidden=true;const value=document.createElement('span');value.className='fixed-choice';value.textContent=select.options[0].textContent;select.after(value);return;}
  if(select.options.length<2||select.options.length>5)return;
  const name=select.getAttribute('aria-label')||select.id;
