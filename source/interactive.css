@@ -31,3 +31,6 @@
 .year-key{display:inline-flex;align-items:center;gap:6px;margin-right:16px}.year-key i{width:10px;height:10px;border-radius:50%}
 
 .figure{scroll-margin-top:0}.tile-index{display:none}.visual-atlas .explore-mosaic button{position:relative}.visual-atlas .tile-index{display:block;position:absolute;right:3px;bottom:3px;background:#FFFFFFEB;color:#344957;font:10px Arial,sans-serif;padding:2px 3px;border-radius:2px}
+
+/* Keep long-page navigation stable during responsive redraws. */
+html{scroll-behavior:auto;overflow-anchor:none}.toolbar{backdrop-filter:none;-webkit-backdrop-filter:none;background:#F4F7FB}.figure{contain-intrinsic-size:none}
