@@ -28,7 +28,27 @@ function draw(){
  performance.measure('atlas-width',{start,end:measured});performance.measure('atlas-calculation',{start:measured,end:calculated});performance.measure('atlas-axes',{start:calculated,end:axesDone});performance.measure('atlas-icons',{start:axesDone,end:iconsDone});performance.measure('atlas-layout',{start,end:performance.now()});
 }
 function renderText(container,rows){container.replaceChildren(...rows.map(p=>button(`#${p.index} · ${p.date} · ${p.title} · ${fmt(p.reactions)} reactions · ${fmt(p.comments)} comments`,()=>openPost(p))))}
-function change(update){Object.assign(state,update);windowEl.scrollTop=0;draw()}
+const tileAnimations=new Map();
+function change(update){
+ // FLIP only on view changes: read current positions together, then animate transforms.
+ const tween=update.mode&&update.mode!==state.mode&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const before=tween?new Map([...icons].filter(([,el])=>!el.hidden).map(([id,el])=>[id,el.getBoundingClientRect()])):null;
+ for(const animation of tileAnimations.values())animation.cancel();tileAnimations.clear();
+ Object.assign(state,update);windowEl.scrollTop=0;draw();
+ if(!before)return;
+ const origin=stage.getBoundingClientRect(),viewport=windowEl.getBoundingClientRect();
+ for(const [id,pos] of current.positions){
+  const previous=before.get(id);if(!previous)continue;
+  const top=origin.top+pos.y;
+  // Offscreen tiles need no compositor layers; they are already at their new positions.
+  if((previous.bottom<viewport.top||previous.top>viewport.bottom)&&(top+pos.h<viewport.top||top>viewport.bottom))continue;
+  const el=icons.get(id),animation=el.animate([
+   {transform:`translate(${previous.left-origin.left}px,${previous.top-origin.top}px) scale(${previous.width/pos.w},${previous.height/pos.h})`},
+   {transform:`translate(${pos.x}px,${pos.y}px) scale(1,1)`}
+  ],{duration:460,easing:'cubic-bezier(.22,.68,0,1)'});
+  tileAnimations.set(id,animation);animation.onfinish=()=>{if(tileAnimations.get(id)===animation)tileAnimations.delete(id)};
+ }
+}
 $('#atlas-controls').addEventListener('click',e=>{const target=e.target.closest('button');if(!target)return;if(target.dataset.mode)change({mode:target.dataset.mode});if(target.dataset.year)change({year:target.dataset.year});if(target.id==='reset'){clearTimeout(searchTimer);$('#search').value='';$('#topic').value='all';change({query:'',year:'all',topic:'all'})}});
 $('#search').addEventListener('input',e=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>change({query:e.target.value}),100)});$('#topic').onchange=e=>change({topic:e.target.value});$('#metric').onchange=e=>change({metric:e.target.value});
 $('#text-index').ontoggle=()=>{if($('#text-index').open)renderText($('#text-index>div'),current.rows)};$('#missing').ontoggle=()=>{if($('#missing').open)renderText($('#missing>div'),current.missing)};

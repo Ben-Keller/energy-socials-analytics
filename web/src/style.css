@@ -9,3 +9,5 @@ post-image{display:block}.dialog-visual{position:relative;width:min(100%,65vh);a
 
 /* Reposition image tiles without animating hundreds of image layers. */
 .post-icon{transition:none;box-shadow:none;isolation:auto}
+
+.post-icon{transform-origin:0 0}
