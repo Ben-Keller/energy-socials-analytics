@@ -1,7 +1,7 @@
 import {fittedAxis} from './axes.js';
 const number=n=>n==null?'—':n.toLocaleString();
 export function layout(posts,width,state){
- const q=state.query.toLowerCase();let rows=posts.filter(p=>(!state.kind||state.kind==='all'||state.kind==='original'&&p.original||state.kind==='repost'&&p.type.includes('repost'))&&(state.year==='all'||state.year==='recent'&&p.year>='2023'||state.year==='earlier'&&p.year<'2023'||p.year===state.year)&&(state.topic==='all'||p.topic===state.topic)&&(!q||`${p.title} ${p.searchText||p.caption||p.sharedText||''}`.toLowerCase().includes(q)));
+ const q=state.query.toLowerCase();let rows=posts.filter(p=>(!state.kind||state.kind==='all'||state.kind==='original'&&p.original||state.kind==='repost'&&['repost','instant repost'].includes(p.type))&&(state.year==='all'||state.year==='recent'&&p.year>='2023'||state.year==='earlier'&&p.year<'2023'||p.year===state.year)&&(state.topic==='all'||p.topic===state.topic)&&(!q||`${p.title} ${p.searchText||p.caption||p.sharedText||''}`.toLowerCase().includes(q)));
  const missing=[],w=width,mobile=w<600,labels=[],positions=new Map();let h=0,axes=null;
  if(['response','words'].includes(state.mode)){
  const xkey=state.mode==='words'?'words':'reactions',ykey=state.mode==='words'?'reactions':'comments';const known=rows.filter(p=>typeof p[xkey]==='number'&&typeof p[ykey]==='number');missing.push(...rows.filter(p=>!known.includes(p)));const left=48,right=w-25,top=50,bottom=mobile?500:560,size=mobile?24:32;
