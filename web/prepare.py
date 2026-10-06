@@ -2,13 +2,13 @@ from pathlib import Path
 import json
 here=Path(__file__).parent;root=here.parent;source=root/'source';out=root/'site'
 data=json.loads((here/'data/source.json').read_text());catalog=json.loads((here/'data/catalog.json').read_text());images=json.loads((here/'data/image-packs.json').read_text())
-keys=['id','index','date','year','month','title','caption','sharedText','words','topic','approach','type','reactions','comments','liveReactions','liveComments','rank','original','source','image','width','height','palette']
+keys=['id','index','date','year','month','title','caption','sharedText','words','topic','approach','type','reactions','comments','liveReactions','liveComments','rank','original','source','image','width','height','palette','detail','status','checked','classified']
 posts=[]
 for p in data['posts']:
  row={k:p.get(k) for k in keys};row.update(images['posts'].get(p['id'],{}));row['preview']=p.get('thumbnails',[{}])[-1].get('src') if p.get('thumbnails') else None
- if p.get('baseline'):row['baseline']={k:p['baseline'].get(k) for k in ['topic_tags','ai_mention','question_any','question_opening','external_link','first_person']}
- posts.append(row)
-siteData={'posts':posts,'colors':data['colors'],'sprite':images['low'],'originalAnalysis':{k:data['originalAnalysis'][k] for k in ['topic_names','approach_names','tag_counts']},'originalRecords':[{k:r[k] for k in ['activity_id','caption_eligible','ranking_eligible']} for r in data['originalRecords']]}
+ if p.get('baseline') and p['original']:row['baseline']={k:p['baseline'].get(k) for k in ['topic_tags','ai_mention','question_any','question_opening','external_link','first_person']}
+ posts.append({k:v for k,v in row.items() if v is not None and v!=''})
+siteData={'posts':posts,'colors':data['colors'],'sprite':images['low'],'originalAnalysis':{k:data['originalAnalysis'][k] for k in ['topic_names','approach_names','tag_counts']},'coverage':data['coverage'],'originalRecords':[{k:r[k] for k in ['activity_id','caption_eligible','ranking_eligible']} for r in data['originalRecords'] if r['caption_eligible'] or r['ranking_eligible']]}
 (here/'src/site-data.json').write_text(json.dumps(siteData,separators=(',',':')))
 omit=['f06','f17','f18','f19','f20','f21','f22','f30'];catalog=[f for f in catalog if f['id'] not in omit and f['number']<24]
 (here/'src/catalog.json').write_text(json.dumps(catalog,separators=(',',':')))

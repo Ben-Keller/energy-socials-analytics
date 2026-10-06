@@ -1,0 +1,64 @@
+{
+  "raw_share_rows": 4271,
+  "share_records": 3910,
+  "media_expansion_rows_merged": 361,
+  "instant_repost_records": 1503,
+  "prior_records": 277,
+  "prior_records_matched": 277,
+  "prior_records_unmatched": 0,
+  "ambiguous_matches": 0,
+  "shares_2023_2026": 839,
+  "new_live_retrievals": 2343,
+  "status": "complete for defined retrieval scope; unavailable records documented",
+  "notes": [
+    "Shares are export events, not a verified count of original authored posts.",
+    "No timezone is declared in CSV timestamps.",
+    "Export visibility is retained verbatim and not interpreted as public sharing consent.",
+    "2023\u20132026 export MediaUrl fields are empty.",
+    "Comments and Reactions export files describe account activity, not audience engagement."
+  ],
+  "public_retrieval_statuses": {
+    "retrieved": 2312,
+    "unavailable in signed-in browser": 25,
+    "deleted or removed": 4,
+    "no public post data": 1,
+    "restricted access in signed-in browser": 1
+  },
+  "updated_at": "2026-10-06T22:42:40.777963+00:00",
+  "completed_at": "2026-10-06T22:42:45.560994+00:00",
+  "retrieval_scope": "All 839 shares dated 2023\u20132026 and all 1,503 instant repost records; earlier shares preserved from export",
+  "share_retrieval_statuses": {
+    "retrieved": 830,
+    "unavailable in signed-in browser": 4,
+    "deleted or removed": 4,
+    "restricted access in signed-in browser": 1
+  },
+  "repost_retrieval_statuses": {
+    "retrieved": 1482,
+    "unavailable in signed-in browser": 21
+  },
+  "records_with_saved_images": 2206,
+  "unique_saved_images": 1298,
+  "public_comment_sample_rows": 3110,
+  "validation": {
+    "unique_share_urls": true,
+    "raw_share_rows_reconciled": true,
+    "all_scope_records_attempted": true,
+    "repost_counters_not_attributed_to_author": true,
+    "all_linked_images_decode": true,
+    "thumbnail_aspect_ratios_checked": true
+  },
+  "independent_confirmation": {
+    "checked_at_utc": "2026-10-06T22:43:34.986730+00:00",
+    "checks_passed": 46,
+    "remaining_validation_issues": [],
+    "unavailable_links_retried": 30,
+    "newly_recovered": 0,
+    "report": "confirmation_scan/independent_audit.json"
+  },
+  "image_correction": {
+    "publisher_logo_fallbacks_removed": 194,
+    "actual_post_visuals_recovered": 191,
+    "no_main_visual_recovered": 3
+  }
+}

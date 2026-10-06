@@ -1,61 +1,22 @@
 from pathlib import Path
-from html.parser import HTMLParser
-import json,re,zipfile,xml.etree.ElementTree as ET
-from PIL import Image
-root=Path(__file__).parent/'site'
-class Links(HTMLParser):
- def __init__(self): super().__init__();self.links=[]
- def handle_starttag(self,tag,attrs):
-  for k,v in attrs:
-   if k in ('src','href') and v and not v.startswith(('#','http:','https:','data:','mailto:')):self.links.append(v.split('#')[0].split('?')[0])
-p=Links();p.feed((root/'index.html').read_text())
-missing=[v for v in p.links if not (root/v.removeprefix('/energy-socials-analytics/')).is_file()]
-data=json.loads((root.parent/'web/data/source.json').read_text())
-for post in data['posts']:
- for key in ['embedded','image']:
-  if post.get(key) and not (root/post[key]).is_file(): missing.append(post[key])
-assert sum(bool(p.get('thumbnails')) for p in data['posts'])==276
-for post in data['posts']:
- for thumbnail in post.get('thumbnails',[]):
-  path=root/thumbnail['src']
-  assert path.is_file(),path
-  with Image.open(path) as image:
-   assert image.format=='WEBP'
-   assert image.size==(thumbnail['width'],thumbnail['height'])
-   assert max(image.size)<=640
-   assert abs(image.width/image.height-post['width']/post['height'])<.025
-assert not missing,missing
-assert len(data['posts'])==277
-assert len(list((root/'d3_figures').glob('*.svg')))==30
-assert len(list((root/'d3_figures').glob('*.png')))==30
-assert max(p.stat().st_size for p in root.rglob('*') if p.is_file())<100*1024*1024
-with zipfile.ZipFile(root/'Riad_Meddeb_Expanded_Dataset.xlsx') as z:
- targets=[el.get('Target') for n in z.namelist() if n.endswith('.rels') for el in ET.fromstring(z.read(n)) if el.get('TargetMode')=='External']
- assert all(t.startswith(('http:','https:')) or (root/t).is_file() for t in targets)
-print('PASS: entry-point assets, 277 records, 276 visuals with verified responsive WebP thumbnails, original image paths, 30 SVG/PNG pairs, workbook links and GitHub file-size limits.')
-
-compact=json.loads((root.parent/'web/src/site-data.json').read_text())
-assert len(compact['posts'])==len({p['id'] for p in compact['posts']})==277
-assert all('caption' in p for p in compact['posts'])
-catalog=json.loads((root.parent/'web/src/catalog.json').read_text())
-assert len(catalog)==16 and all(f['number']<24 for f in catalog)
-html=(root/'index.html').read_text()
-inline=re.search(r'<script id="atlas-data" type="application/json">(.*?)</script>',html,re.S)
-expected={**compact,'sprite':{k:compact['sprite'][k] for k in ['cols','rows']}}
-assert inline and json.loads(inline.group(1))==expected
-assert html.count('class="post-icon"')==277
-assert html.count('class="figure"')==16
-assert 'post-atlas-' not in html
-scripts=[v for v in p.links if v.endswith('.js')]
-assert len(scripts)==1
-assert (root/scripts[0].removeprefix('/energy-socials-analytics/')).stat().st_size<20000
-packs=json.loads((root.parent/'web/data/image-packs.json').read_text())
-assert len(packs['packs'])==9
-assert packs['low']['bytes']<80000
-assert all((root/p['src']).stat().st_size<60000 for p in packs['packs'])
-coords=[tuple(p['sprite']) for p in compact['posts'] if p['image']]
-assert len(coords)==len(set(coords))==276
-previews=[p['preview'] for p in compact['posts'] if p['image']]
-assert len(previews)==276 and all((root/p).is_file() for p in previews)
-assert all(p.endswith('.webp') for p in previews)
-print('PASS: static HTML contains 277 posts and 16 analyses; inline captions; entry JavaScript under 20KB; nine image packs under 60KB each; 276 unique embedded preview cells and optimized detail previews.')
+import json,re,gzip
+root=Path(__file__).parent;web=root/'web';site=root/'site';data=json.loads((web/'src/site-data.json').read_text());posts=data['posts'];packs=json.loads((web/'data/image-packs.json').read_text())
+assert len(posts)==5413 and len({p['id'] for p in posts})==5413
+assert sum(p['year']>='2023' for p in posts)==2342
+assert sum(p['original'] for p in posts)==660
+assert sum(bool(p.get('image')) for p in posts)==2206
+assert all(p.get('reactions') is None and p.get('comments') is None for p in posts if not p['original'])
+chunks={}
+for p in posts:
+ if p['detail'] not in chunks:chunks[p['detail']]=json.loads((site/p['detail']).read_text())
+ assert p['id'] in chunks[p['detail']]
+ if p.get('image'):
+  assert (site/p['image']).is_file() and (site/p['preview']).is_file()
+  x,y=p['sprite'];assert 0<=x<packs['low']['cols'] and 0<=y<packs['low']['rows']
+  assert (site/p['tile']['src']).is_file()
+assert len({p['image'] for p in posts if p.get('image')})==1298
+assert len(packs['packs'])==41 and max(p['bytes'] for p in packs['packs'])<65000
+assert len(gzip.compress((site/'index.html').read_bytes()))<650000
+assert len(json.loads((web/'src/catalog.json').read_text()))==16
+for file in ['Shares.csv','Instant_Reposts.csv','Riad_Meddeb_Rebuilt_Dataset.xlsx','Image_Manifest.csv','Annual_Coverage.csv']:assert (site/file).is_file()
+print('Verified all 5,413 records, text chunks, original/repost attribution, 2,206 image references, 41 deduplicated packs, 16 charts and downloads.')

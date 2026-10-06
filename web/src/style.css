@@ -11,3 +11,5 @@ post-image{display:block}.dialog-visual{position:relative;width:min(100%,65vh);a
 .post-icon{transition:none;box-shadow:none;isolation:auto}
 
 .post-icon{transform-origin:0 0}
+
+.filters{flex-wrap:wrap}.filters .search{flex:1 1 220px}.year-filter>div{flex-wrap:wrap}.post-icon{transition:none}.static-atlas .post-icon{content-visibility:auto}
