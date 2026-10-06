@@ -20,7 +20,7 @@ inter=inter.replace("document.querySelectorAll('article.figure').forEach(setupEx
 inter=inter.replace("if(p.embedded)appendThumbnail(b,p,'70px').attr('alt','');",'')
 inter=inter.replace('v.draw();explorers.push(v);','lastWidth=Math.round(host.node().clientWidth);v.draw();explorers.push(v);')
 inter=inter.replace('new ResizeObserver(entries=>','const observer=new ResizeObserver(entries=>').replace('}).observe(host.node());','});observer.observe(host.node());')
-(here/'src/analysis.js').write_text("import * as d3 from 'd3';\nimport catalog from './catalog.json';\nexport function createAnalysis(data,showPost){\n"+charts+'\nfunction saveBlob(blob,name){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}\n'+inter+'\nreturn setupExplorer;\n}')
+(here/'src/analysis.js').write_text("import * as d3 from 'd3';\nimport catalog from './catalog.json';\nexport function createAnalysis(data,showPost,loadDetail){\n"+charts+'\nfunction saveBlob(blob,name){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}\n'+inter+'\nreturn setupExplorer;\n}')
 (here/'src/analysis.css').write_text((source/'interactive.css').read_text())
 
 print('Prepared static page:',len(posts),'posts;',len(catalog),'analyses')

@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import catalog from './catalog.json';
-export function createAnalysis(data,showPost){
+export function createAnalysis(data,showPost,loadDetail){
 /* D3 7.9.0 is the only chart renderer. Every report SVG is produced here in the HTML. */
 const D=data, F=catalog.filter(f=>!['f17','f18'].includes(f.id));
 const S=D.originalAnalysis,P=D.posts,A=D.originalRecords,C=A.filter(d=>d.caption_eligible),R=A.filter(d=>d.ranking_eligible);
@@ -69,7 +69,7 @@ const hover=d3.select('body').append('div').attr('class','data-tooltip').attr('h
 function openRowsDialog(rows,label){
  const dlg=document.querySelector('#records-dialog');d3.select('#records-title').text(label);d3.select('#records-count').text(`${rows.length} underlying records · select a post to read its caption`);
  const list=d3.select('#records-list');list.html('');rows.forEach(p=>{const b=list.append('button').attr('class','record-row').on('click',()=>{dlg.close();showPost(p)});const t=b.append('span');t.append('small').text(`${p.date} · #${p.index}`);t.append('strong').text(p.title);t.append('small').text(`${fmt(p.reactions)} reactions · ${fmt(p.comments)} comments`)});
- document.querySelector('#records-download').onclick=()=>{const csv=d3.csvFormat(rows.map(p=>({index:p.index,date:p.date,title:p.title,caption:p.caption,topic:p.topic,approach:p.approach,reactions:p.reactions,comments:p.comments,url:p.source})));saveBlob(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}),'selected-posts.csv')};dlg.showModal();dlg.scrollTop=0;
+ document.querySelector('#records-download').onclick=async()=>{const complete=typeof loadDetail==='function'?await Promise.all(rows.map(async p=>({...p,...await loadDetail(p)}))):rows;const csv=d3.csvFormat(complete.map(p=>({index:p.index,date:p.date,title:p.title,caption:p.caption,topic:p.topic,approach:p.approach,reactions:p.reactions,comments:p.comments,url:p.source})));saveBlob(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}),'selected-posts.csv')};dlg.showModal();dlg.scrollTop=0;
 }
 const records=d3.select('body').append('dialog').attr('id','records-dialog').attr('aria-labelledby','records-title');records.append('button').attr('class','close').attr('aria-label','Close records').text('Close ×').on('click',()=>records.node().close());records.append('h2').attr('id','records-title');records.append('p').attr('id','records-count');records.append('button').attr('id','records-download').text('Download these records');records.append('div').attr('id','records-list');
 function addSelection(v,label,rows,value){v.selection.html('');v.selection.append('strong').text(label);if(value)v.selection.append('span').text(value);v.selection.append('button').text(`Read ${rows.length} posts →`).property('disabled',!rows.length).on('click',()=>openRowsDialog(rows,label));}
