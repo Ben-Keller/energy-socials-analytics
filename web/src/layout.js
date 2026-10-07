@@ -4,7 +4,7 @@ export function layout(posts,width,state){
  const q=state.query.toLowerCase();let rows=posts.filter(p=>(!state.kind||state.kind==='all'||state.kind==='original'&&p.original||state.kind==='repost'&&['repost','instant repost'].includes(p.type))&&(state.year==='all'||state.year==='recent'&&p.year>='2023'||state.year==='earlier'&&p.year<'2023'||p.year===state.year)&&(state.topic==='all'||p.topic===state.topic)&&(!q||`${p.title} ${p.searchText||p.caption||p.sharedText||''}`.toLowerCase().includes(q)));
  const missing=[],w=width,mobile=w<600,labels=[],positions=new Map();let h=0,axes=null;
  if(['response','words'].includes(state.mode)){
- const xkey=state.mode==='words'?'words':'reactions',ykey=state.mode==='words'?'reactions':'comments';const known=rows.filter(p=>typeof p[xkey]==='number'&&typeof p[ykey]==='number');missing.push(...rows.filter(p=>!known.includes(p)));const left=48,right=w-25,top=50,bottom=mobile?500:560,size=mobile?24:32;
+ const xkey=state.mode==='words'?'words':'reactions',ykey=state.mode==='words'?'reactions':'comments';const known=rows.filter(p=>typeof p[xkey]==='number'&&typeof p[ykey]==='number');missing.push(...rows.filter(p=>!known.includes(p)));const left=48,right=w-25,top=50,bottom=Math.max(200,Math.min(mobile?500:560,(state.viewportHeight||625)-65)),size=mobile?24:32;
  const fitted=state.mode==='words';
  const axisFor=key=>{if(fitted)return fittedAxis(known.map(p=>p[key]),mobile?4:6);const max=Math.max(1,...known.map(p=>p[key]));return {scale:v=>Math.log1p(v)/Math.log1p(max),ticks:[0,1,5,10,25,50,100,250,500,1000,2500,5000].filter(v=>v<=max)}};
  const xAxis=axisFor(xkey),yAxis=axisFor(ykey),x=v=>left+xAxis.scale(v)*(right-left),y=v=>bottom-yAxis.scale(v)*(bottom-top);
