@@ -12,14 +12,14 @@ const NS='http://www.w3.org/2000/svg';
 function svgNode(tag,attrs,text){const el=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,v);if(text!=null)el.textContent=text;return el}
 function button(text,fn){const b=document.createElement('button');b.textContent=text;b.onclick=fn;return b}
 const guides=svgNode('svg',{class:'atlas-guides','aria-hidden':'true'});
-function draw(){
+function draw(retain=new Set()){
  const nextWidth=viewportWidth||Math.floor(windowEl.clientWidth);
  if(!interactiveLayout){stage.querySelectorAll('.static-group').forEach(el=>el.remove());stage.prepend(guides);stage.classList.remove('static-atlas');interactiveLayout=true}
  const start=performance.now();lastWidth=nextWidth;const measured=performance.now();current=layout(posts,lastWidth,state);const calculated=performance.now();
  stage.style.height=current.h+'px';guides.setAttribute('width',lastWidth);guides.setAttribute('height',current.h);const marks=document.createDocumentFragment(),a=current.axes;
  if(a){for(const t of a.x){marks.append(svgNode('line',{x1:t.pos,x2:t.pos,y1:a.top,y2:a.bottom}),svgNode('text',{x:t.pos,y:a.bottom+25,'text-anchor':'middle'},t.v))}for(const t of a.y){marks.append(svgNode('line',{x1:a.left,x2:a.right,y1:t.pos,y2:t.pos}),svgNode('text',{x:a.left-8,y:t.pos+4,'text-anchor':'end'},t.v))}marks.append(svgNode('text',{x:a.left,y:20},a.ykey==='comments'?'Comments':'Reactions'),svgNode('text',{x:(a.left+a.right)/2,y:a.bottom+52,'text-anchor':'middle'},(a.xkey==='words'?'Caption words':'Reactions')+(a.fitted?'':' · log(1 + value)')))}
- for(const t of current.labels)marks.append(svgNode('text',{class:'group-label',x:t.x,y:t.y},t.text),svgNode('text',{class:'group-sub',x:state.mode==='rank'?t.x:lastWidth-12,y:state.mode==='rank'?t.y+19:t.y,'text-anchor':state.mode==='rank'?'start':'end'},t.sub));guides.replaceChildren(marks);const axesDone=performance.now();
- syncVisible();
+ for(const t of current.labels)marks.append(svgNode('text',{class:'group-label',x:t.x,y:t.y},t.text),svgNode('text',{class:'group-sub',x:state.mode==='rank'||t.missing?t.x:lastWidth-12,y:state.mode==='rank'||t.missing?t.y+19:t.y,'text-anchor':state.mode==='rank'||t.missing?'start':'end'},t.sub));guides.replaceChildren(marks);const axesDone=performance.now();
+ syncVisible(retain);
  const iconsDone=performance.now();$('#view-description').textContent=descriptions[state.mode];$('#atlas-count').textContent=`${current.positions.size} of ${posts.length} posts`;
  root.querySelectorAll('[data-mode]').forEach(el=>el.setAttribute('aria-pressed',el.dataset.mode===state.mode));root.querySelectorAll('[data-kind]').forEach(el=>el.setAttribute('aria-pressed',el.dataset.kind===state.kind));root.querySelectorAll('[data-year]').forEach(el=>el.setAttribute('aria-pressed',el.dataset.year===state.year));$('#rank-control').hidden=state.mode!=='rank';$('#reset').hidden=!state.query&&state.year==='recent'&&state.topic==='all'&&state.kind==='all';
  const missing=$('#missing');missing.hidden=!current.missing.length;missing.querySelector('summary').textContent=`${current.missing.length} posts lack the counters needed for this view`;if(missing.open)renderText(missing.querySelector('div'),current.missing);
@@ -28,41 +28,49 @@ function draw(){
  performance.measure('atlas-width',{start,end:measured});performance.measure('atlas-calculation',{start:measured,end:calculated});performance.measure('atlas-axes',{start:calculated,end:axesDone});performance.measure('atlas-icons',{start:axesDone,end:iconsDone});performance.measure('atlas-layout',{start,end:performance.now()});
 }
 
-function syncVisible(){
+function syncVisible(retain=new Set()){
  if(!interactiveLayout)return;
  const top=windowEl.scrollTop-160,bottom=top+windowEl.clientHeight+320,visible=new Set(),a=current.axes;
- for(const [id,pos] of current.positions){if(pos.y+pos.h<top||pos.y>bottom)continue;visible.add(id);let el=icons.get(id);const p=byId.get(id);if(!el){el=document.createElement('button');el.className='post-icon';el.dataset.id=id;el.setAttribute('aria-label',`${p.date}: ${p.title}`);el.style.setProperty('--topic',data.colors[p.topic]||'#84919a');const visual=document.createElement('span');visual.className=p.image?'post-thumb':'no-image';if(p.image){visual.style.backgroundPosition=`${p.sprite[0]/(data.sprite.cols-1)*100}% ${p.sprite[1]/(data.sprite.rows-1)*100}%`;}else visual.textContent='No visual';const index=document.createElement('span');index.className='post-index';index.textContent=p.index;el.append(visual,index);stage.append(el);icons.set(id,el);}el.hidden=false;el.style.transform=`translate(${pos.x}px,${pos.y}px)`;el.style.width=pos.w+'px';el.style.height=pos.h+'px';el.classList.toggle('scatter-icon',!!a);el.querySelector('.post-index').hidden=!!a||state.mode==='rank';let bar=el.querySelector('.rank-bar');if(state.mode==='rank'){if(!bar){bar=document.createElement('span');bar.className='rank-bar';el.append(bar)}bar.style.width=pos.bar+'px'}else bar?.remove();if(p.tile){if(loadedPacks.has(p.tile.src))packStyle(p,el.querySelector('.post-thumb'));else requestPack(p.tile.src).catch(()=>{});}}
+ for(const [id,pos] of current.positions){if((pos.y+pos.h<top||pos.y>bottom)&&!retain.has(id))continue;visible.add(id);let el=icons.get(id);const p=byId.get(id);if(!el){el=document.createElement('button');el.className='post-icon';el.dataset.id=id;el.setAttribute('aria-label',`${p.date}: ${p.title}`);el.style.setProperty('--topic',data.colors[p.topic]||'#84919a');const visual=document.createElement('span');visual.className=p.image?'post-thumb':'no-image';if(p.image){visual.style.backgroundPosition=`${p.sprite[0]/(data.sprite.cols-1)*100}% ${p.sprite[1]/(data.sprite.rows-1)*100}%`;}else visual.textContent='No visual';const index=document.createElement('span');index.className='post-index';index.textContent=p.index;el.append(visual,index);stage.append(el);icons.set(id,el);}el.hidden=false;el.style.transform=`translate(${pos.x}px,${pos.y}px)`;el.style.width=pos.w+'px';el.style.height=pos.h+'px';el.classList.toggle('scatter-icon',!!a&&!pos.missing);el.querySelector('.post-index').hidden=!!a||state.mode==='rank';let bar=el.querySelector('.rank-bar');if(state.mode==='rank'&&!pos.missing){if(!bar){bar=document.createElement('span');bar.className='rank-bar';el.append(bar)}bar.style.width=pos.bar+'px'}else bar?.remove();if(p.tile){if(loadedPacks.has(p.tile.src))packStyle(p,el.querySelector('.post-thumb'));else requestPack(p.tile.src).catch(()=>{});}}
 
- for(const [id,el] of icons)if(!visible.has(id)){el.remove();icons.delete(id);}
+ for(const [id,el] of icons)if(!visible.has(id)&&!tileAnimations.has(id)){el.remove();icons.delete(id);}
 }
-let scrollFrame;windowEl.addEventListener('scroll',()=>{cancelAnimationFrame(scrollFrame);scrollFrame=requestAnimationFrame(syncVisible)},{passive:true});
+let scrollFrame;windowEl.addEventListener('scroll',()=>{cancelAnimationFrame(scrollFrame);scrollFrame=requestAnimationFrame(()=>syncVisible())},{passive:true});
 
 function renderText(container,rows){container.replaceChildren(...rows.map(p=>button(`#${p.index} · ${p.date} · ${p.title} · ${fmt(p.reactions)} reactions · ${fmt(p.comments)} comments`,()=>openPost(p))))}
 const tileAnimations=new Map();
+const motionDuration=1400,motionEasing='cubic-bezier(.4,0,.2,1)';
 function change(update){
- // FLIP only on view changes: read current positions together, then animate transforms.
  const tween=update.mode&&update.mode!==state.mode&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
- const before=tween?new Map([...icons].filter(([,el])=>!el.hidden).map(([id,el])=>[id,el.getBoundingClientRect()])):null;
+ // Read rendered geometry before cancelling so interrupted transitions remain continuous.
+ const previousLayout=current,previousScroll=windowEl.scrollTop,oldOrigin=stage.getBoundingClientRect();
+ const before=tween?new Map([...icons].map(([id,el])=>{const r=el.getBoundingClientRect();return [id,{x:r.left-oldOrigin.left,y:r.top-oldOrigin.top-previousScroll,w:r.width,h:r.height}]})):null;
  for(const animation of tileAnimations.values())animation.cancel();tileAnimations.clear();
- Object.assign(state,update);windowEl.scrollTop=0;draw();
+ Object.assign(state,update);windowEl.scrollTop=0;
+ draw(before?new Set(before.keys()):new Set());
  if(!before)return;
- const origin=stage.getBoundingClientRect(),viewport=windowEl.getBoundingClientRect();
- for(const [id,pos] of current.positions){
-  const previous=before.get(id);if(!previous)continue;
-  const top=origin.top+pos.y;
-  // Offscreen tiles need no compositor layers; they are already at their new positions.
-  if((previous.bottom<viewport.top||previous.top>viewport.bottom)&&(top+pos.h<viewport.top||top>viewport.bottom))continue;
-  const el=icons.get(id);if(!el)continue;const animation=el.animate([
-   {transform:`translate(${previous.left-origin.left}px,${previous.top-origin.top}px) scale(${previous.width/pos.w},${previous.height/pos.h})`},
-   {transform:`translate(${pos.x}px,${pos.y}px) scale(1,1)`}
-  ],{duration:460,easing:'cubic-bezier(.22,.68,0,1)'});
-  tileAnimations.set(id,animation);animation.onfinish=()=>{if(tileAnimations.get(id)===animation)tileAnimations.delete(id)};
+ const height=windowEl.clientHeight;
+ for(const [id,el] of icons){
+  const pos=current.positions.get(id);if(!pos)continue;
+  const old=previousLayout.positions.get(id),previous=before.get(id)||(old?{...old,y:old.y-previousScroll}:null);
+  if(!previous)continue;
+  // Long offscreen journeys start/end just outside the viewport, preserving direction.
+  const clampY=(y,h)=>Math.max(-h-80,Math.min(height+80,y));
+  const from={...previous,y:before.has(id)?previous.y:clampY(previous.y,previous.h)},to={...pos,y:clampY(pos.y,pos.h)};
+  const animation=el.animate([
+   {transform:`translate(${from.x}px,${from.y}px) scale(${from.w/pos.w},${from.h/pos.h})`},
+   {transform:`translate(${to.x}px,${to.y}px) scale(1,1)`}
+  ],{duration:motionDuration,easing:motionEasing});
+  tileAnimations.set(id,animation);
+  animation.onfinish=()=>{if(tileAnimations.get(id)===animation){tileAnimations.delete(id);if(!tileAnimations.size)syncVisible();}};
  }
+ guides.getAnimations().forEach(animation=>animation.cancel());
+ guides.animate([{opacity:.15},{opacity:1}],{duration:motionDuration,easing:motionEasing});
 }
 $('#atlas-controls').addEventListener('click',e=>{const target=e.target.closest('button');if(!target)return;if(target.dataset.kind)change({kind:target.dataset.kind});if(target.dataset.mode)change({mode:target.dataset.mode});if(target.dataset.year)change({year:target.dataset.year});if(target.id==='reset'){clearTimeout(searchTimer);$('#search').value='';$('#topic').value='all';change({query:'',year:'recent',topic:'all',kind:'all'})}});
 let searchData;$('#search').addEventListener('input',e=>{clearTimeout(searchTimer);const query=e.target.value;searchTimer=setTimeout(async()=>{if(query&&!searchData){$('#atlas-count').textContent='Loading full-text search…';try{searchData=await fetch('data/search-text.json').then(r=>{if(!r.ok)throw Error();return r.json()});for(const p of posts)p.searchText=searchData[p.id]||'';}catch{$('#atlas-count').textContent='Full-text search unavailable; searching titles.';}}if($('#search').value===query)change({query});},160)});$('#topic').onchange=e=>change({topic:e.target.value});$('#metric').onchange=e=>change({metric:e.target.value});
 $('#text-index').ontoggle=()=>{if($('#text-index').open)renderText($('#text-index>div'),current.rows)};$('#missing').ontoggle=()=>{if($('#missing').open)renderText($('#missing>div'),current.missing)};
-let resizeFrame;new ResizeObserver(entries=>{viewportWidth=Math.floor(entries[0].contentRect.width);if(interactiveLayout&&Math.abs(lastWidth-viewportWidth)>2){cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(draw)}}).observe(windowEl);
+let resizeFrame;new ResizeObserver(entries=>{viewportWidth=Math.floor(entries[0].contentRect.width);if(interactiveLayout&&Math.abs(lastWidth-viewportWidth)>2){cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{for(const animation of tileAnimations.values())animation.cancel();tileAnimations.clear();draw()})}}).observe(windowEl);
 // Sharpen only visible image packs. Two requests at a time; no full-sheet download.
 const packCache=new Map(),packQueue=[],loadedPacks=new Set(),packMembers=new Map();for(const p of posts)if(p.tile){if(!packMembers.has(p.tile.src))packMembers.set(p.tile.src,[]);packMembers.get(p.tile.src).push(p);}let activePacks=0;
 function packStyle(p,node){node.style.backgroundImage=`url("${new URL(p.tile.src,document.baseURI).href}")`;node.style.backgroundSize='800% 400%';node.style.backgroundPosition=`${p.tile.x/7*100}% ${p.tile.y/3*100}%`;node.dataset.sharp='true'}

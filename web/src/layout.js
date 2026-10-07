@@ -17,5 +17,12 @@ export function layout(posts,width,state){
  const list=[...groups].sort((a,b)=>state.mode==='timeline'?a[0].localeCompare(b[0]):b[1].length-a[1].length);const cols=Math.max(3,Math.floor((w-24)/(mobile?65:78))),gap=8,size=Math.floor((w-24-(cols-1)*gap)/cols);let y=18;
  list.forEach(([name,posts])=>{const title=key==='month'?new Date(name+'-02').toLocaleDateString('en',{month:'long',year:'numeric'}):name;labels.push({x:12,y:y+16,text:title,sub:`${posts.length} posts`});y+=49;posts.forEach((p,i)=>positions.set(p.id,{x:12+(i%cols)*(size+gap),y:y+Math.floor(i/cols)*(size+gap),w:size,h:size}));y+=Math.ceil(posts.length/cols)*(size+gap)+30});h=y;
  }
+ // Keep a destination for every selected record across all seven views.
+ if(missing.length){
+  const gap=8,size=mobile?48:60,cols=Math.max(3,Math.floor((w-24)/(size+gap))),start=h+64;
+  labels.push({x:12,y:h+22,text:'Without the counters needed above',sub:`${missing.length} posts`,missing:true});
+  missing.forEach((p,i)=>positions.set(p.id,{x:12+(i%cols)*(size+gap),y:start+Math.floor(i/cols)*(size+gap),w:size,h:size,missing:true}));
+  h=start+Math.ceil(missing.length/cols)*(size+gap)+24;
+ }
  const value={rows:rows.filter(p=>positions.has(p.id)),labels,positions,h:Math.max(220,h),axes,missing};return value;
 }
