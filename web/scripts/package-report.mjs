@@ -6,7 +6,8 @@ const web=fileURLToPath(new URL('../',import.meta.url)),pub=path.join(web,'publi
 let html=fs.readFileSync(path.join(web,'dist/index.html'),'utf8');
 html=html.replace(/<link rel="preload"[^>]*>/g,'');
 const data=JSON.parse(fs.readFileSync(path.join(web,'src/report-data.json'),'utf8'));
-const media={},sourceMap=new Map();
+const media={},sourceMap=new Map(),overrides=JSON.parse(fs.readFileSync(path.join(web,'src/preview-overrides.json'),'utf8'));
+for(const p of data.posts)if(overrides[p.id])p.thumbnail=overrides[p.id].image.replace('post_images/','thumbnails/').replace(/\.[^.]+$/,'-320.webp');
 const embed=rel=>{if(!rel)return '';const ext=path.extname(rel).slice(1),mime={jpg:'jpeg',jpeg:'jpeg',png:'png',webp:'webp'}[ext];if(!mime)throw Error('Unknown image '+rel);return 'data:image/'+mime+';base64,'+fs.readFileSync(path.join(pub,rel)).toString('base64')};
 for(const p of data.posts){if(p.thumbnail){const original=p.image;media[p.thumbnail]??=embed(p.thumbnail);if(original)sourceMap.set('/energy-socials-analytics/'+original,p.thumbnail.replace('-320.','-640.'));p.image=p.thumbnail;}}
 data.media=media;data.base='';

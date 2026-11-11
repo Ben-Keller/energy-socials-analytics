@@ -57,3 +57,9 @@
    appearing only while Newsreader is loading. */
 @font-face{font-family:'Newsreader Heading Fallback';src:local('Georgia');size-adjust:96.09%;ascent-override:76.49%;descent-override:27.58%;line-gap-override:0%}
 .report-hero h1{font-family:Newsreader,'Newsreader Heading Fallback',Georgia,serif}
+
+/* A single post needs no cohort controls or duplicate result list. */
+.records-dialog.single-post[open]{grid-template-rows:auto minmax(0,1fr)}
+.records-dialog.single-post .records-tools,.records-dialog.single-post #records-list,.records-dialog.single-post .record-count{display:none}
+.records-dialog.single-post .records-layout{grid-template-columns:minmax(0,1fr)}
+@media(min-width:741px){.records-dialog.single-post{width:min(800px,94vw)}}

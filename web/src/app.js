@@ -4,7 +4,9 @@ import analysisStyles from './analysis.css?url';
 performance.mark('app-start');
 if(!new URLSearchParams(location.search).has('embedded'))location.replace(new URL('./',document.baseURI).href+'#explore/'+(location.hash.slice(1)||'atlas'));
 const $=s=>document.querySelector(s),data=JSON.parse($('#atlas-data').textContent),posts=data.posts,byId=new Map(posts.map(p=>[p.id,p]));
-const atlasPosts=document.documentElement.classList.contains('report-primary')?posts.filter(post=>post.image):posts;
+const primaryReport=document.documentElement.classList.contains('report-primary');
+const atlasPosts=primaryReport?posts.filter(post=>post.image):posts;
+const defaultPreview=primaryReport?posts.find(post=>post.index===4128):null;
 const root=$('#post-atlas'),stage=$('#atlas-stage'),windowEl=$('.atlas-window'),lowImage=stage.style.getPropertyValue('--atlas-image');
 const icons=new Map([...stage.querySelectorAll('.post-icon')].map(el=>[el.dataset.id,el]));
 const state={mode:'response',query:'',year:'recent',topic:'all',metric:'reactions',kind:'all'};
@@ -28,7 +30,7 @@ function draw(retain=new Set()){
  root.querySelectorAll('[data-mode]').forEach(el=>el.setAttribute('aria-pressed',el.dataset.mode===state.mode));root.querySelectorAll('[data-kind]').forEach(el=>el.setAttribute('aria-pressed',el.dataset.kind===state.kind));root.querySelectorAll('[data-year]').forEach(el=>el.setAttribute('aria-pressed',el.dataset.year===state.year));$('#rank-control').hidden=state.mode!=='rank';$('#reset').hidden=!state.query&&state.year==='recent'&&state.topic==='all'&&state.kind==='all';
  $('#text-index summary').textContent=`Browse this selection as an accessible text list (${current.rows.length})`;if($('#text-index').open)renderText($('#text-index>div'),current.rows);
  let empty=$('#no-results');if(!current.positions.size){if(!empty){empty=document.createElement('p');empty.id='no-results';empty.className='no-results';empty.textContent='No matching posts. Try another search or clear the filters.';stage.append(empty)}}else empty?.remove();
- if(focused&&!current.positions.has(focused.id))clearInspector();
+ if(focused&&focused!==defaultPreview&&!current.positions.has(focused.id))clearInspector();
  performance.measure('atlas-width',{start,end:measured});performance.measure('atlas-calculation',{start:measured,end:calculated});performance.measure('atlas-axes',{start:calculated,end:axesDone});performance.measure('atlas-icons',{start:axesDone,end:iconsDone});performance.measure('atlas-layout',{start,end:performance.now()});
 }
 
@@ -144,4 +146,4 @@ function mount(el){if(!jobs.has(el.id))jobs.set(el.id,loadAnalysis().then(setup=
 const chartsObserver=new IntersectionObserver(es=>{for(const e of es)if(e.isIntersecting){chartsObserver.unobserve(e.target);mount(e.target)}},{rootMargin:'100px'});document.querySelectorAll('article.figure').forEach(el=>chartsObserver.observe(el));
 async function goTo(id){const aliases={f06:'rank',f19:'timeline',f20:'topics',f21:'palette',f22:'rank',f30:'format',library:'timeline'};if(aliases[id]){change({mode:aliases[id]});$('#atlas').scrollIntoView();return}const target=document.getElementById(id);if(!target)return;if(target.matches('article.figure')){const figures=[...document.querySelectorAll('article.figure')];await Promise.all(figures.slice(0,figures.indexOf(target)+1).map(mount))}requestAnimationFrame(()=>target.scrollIntoView())}
 $('#analysis-jump').onchange=e=>{if(e.target.value){history.replaceState(null,'','#'+e.target.value);goTo(e.target.value);e.target.value=''}};document.querySelector('a[href="#report"], a[href="explore/#report"]')?.addEventListener('pointerenter',()=>loadAnalysis().catch(()=>{}),{once:true});addEventListener('hashchange',()=>goTo(location.hash.slice(1)));
-draw();performance.mark('atlas-ready');performance.measure('app-init','app-start');if(location.hash&&!(document.documentElement.classList.contains('report-primary')&&location.hash==='#atlas'))goTo(location.hash.slice(1));
+draw();if(defaultPreview)focusPost(defaultPreview);performance.mark('atlas-ready');performance.measure('app-init','app-start');if(location.hash&&!(document.documentElement.classList.contains('report-primary')&&location.hash==='#atlas'))goTo(location.hash.slice(1));

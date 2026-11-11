@@ -20,7 +20,10 @@ assert (site/'atlas-overview.webp').is_file()
 for src in {p['tile']['src'] for p in posts if p.get('tile')}:
  for size in [48,64]:assert (site/src.replace('.webp',f'-{size}.webp')).is_file()
 image_meta=json.loads((web/'src/generated/image-meta.json').read_text())
-assert len(image_meta)==1377
+assert len(image_meta)==1378
+for post_id,preview in json.loads((web/'src/preview-overrides.json').read_text()).items():
+ assert any(p['id']==post_id for p in posts)
+ assert (site/preview['image']).is_file()
 for stem,meta in image_meta.items():
  for size,width,height in meta['variants']:
   assert (site/f'thumbnails/{stem}-{size}.webp').is_file()

@@ -1,7 +1,8 @@
 import metadata from './generated/image-meta.json';
+import overrides from './preview-overrides.json';
 
 export function imageAttributes(post,base='',{height=280,mobileHeight=240,width='680px',mobileWidth='calc(100vw - 48px)',cap=1280}={}){
- const original=post.image||post.preview||post.thumbnail||'',stem=original.split('/').at(-1)?.replace(/-(160|320|640|1280)\.webp$|\.[^.]+$/,'');
+ const original=overrides[post.id]?.image||post.image||post.preview||post.thumbnail||'',stem=original.split('/').at(-1)?.replace(/-(160|320|640|1280)\.webp$|\.[^.]+$/,'');
  const meta=metadata[stem];if(!meta)return {src:base+original};
  const choices=[...new Map(meta.variants.filter(([tier])=>tier<=cap).map(row=>[row[1],row])).values()];
  const fallback=choices.find(([tier])=>tier===640)||choices.at(-1),src=tier=>base+`thumbnails/${stem}-${tier}.webp`,ratio=meta.width/meta.height;
