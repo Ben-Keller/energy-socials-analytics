@@ -28,15 +28,33 @@ export function createFlagshipCharts({posts:P,asset,openRows}){
   s.append('g').attr('class','chart-axis').attr('transform',`translate(0,${bottom})`).call(d3.axisBottom(x).tickValues(ticks).tickFormat(g=>g.slice(0,4)).tickSize(0).tickPadding(16));
   s.append('line').attr('x1',left).attr('x2',w-right).attr('y1',y(100)).attr('y2',y(100)).attr('stroke',SDG.navy).attr('stroke-dasharray','3 5').attr('opacity',.3);
   const cursor=s.append('line').attr('class','flagship-hover').attr('y1',top).attr('y2',bottom).attr('stroke',SDG.navy).attr('stroke-dasharray','3 4').attr('opacity',0);
-  function select(g){cursor.attr('x1',x(g.name)).attr('x2',x(g.name)).attr('opacity',.35);}
+  const endpointLabels=s.append('g').attr('class','trend-endpoints');
+  const readout=s.append('g').attr('class','trend-readout').attr('display','none');
+  const quarterLabel=text(readout,w-4,16,'','flagship-series','end').attr('class','flagship-series trend-quarter');
+  let activeQuarter=null;
+  function select(g){
+   if(activeQuarter===g)return;activeQuarter=g;hideTip();
+   const px=x(g.name),toRight=px+124<=w-8,lx=px+(toRight?12:-12),anchor=toRight?'start':'end';
+   cursor.attr('x1',px).attr('x2',px).attr('opacity',.35);
+   endpointLabels.attr('opacity',0);readout.attr('display',null).attr('data-quarter',g.name).raise();quarterLabel.text(g.name);
+   const labels=series.map(spec=>({...spec,pointY:y(index(g,spec)),value:spec.key==='share'?pct(g.share)+' · 3+ comments':fmt(g[spec.key])+' '+spec.unit})).sort((a,b)=>a.pointY-b.pointY);
+   labels.forEach((d,i)=>d.labelY=Math.max(top+12,d.pointY-10,i?labels[i-1].labelY+22:0));
+   const overflow=Math.max(0,labels.at(-1).labelY-(bottom-8));labels.forEach(d=>d.labelY-=overflow);
+   const groups=readout.selectAll('.trend-hover-value').data(labels,d=>d.key).join(enter=>{const g=enter.append('g').attr('class','trend-hover-value');g.append('line');g.append('circle');g.append('text').attr('class','trend-value');return g}).attr('data-series',d=>d.key);
+   groups.select('line').attr('x1',px).attr('y1',d=>d.pointY).attr('x2',lx+(toRight?-4:4)).attr('y2',d=>d.labelY-4).attr('stroke',d=>d.color).attr('opacity',.5);
+   groups.select('circle').attr('cx',px).attr('cy',d=>d.pointY).attr('r',small?5:6).attr('fill','#fff').attr('stroke',d=>d.color).attr('stroke-width',2);
+   groups.select('text').attr('x',lx).attr('y',d=>d.labelY).attr('text-anchor',anchor).attr('fill',d=>d.color).text(d=>d.value);
+  }
+  function reset(){activeQuarter=null;readout.attr('display','none');endpointLabels.attr('opacity',1);const px=x(quarters.at(-1).name);cursor.attr('x1',px).attr('x2',px).attr('opacity',.35)}
   for(const spec of series){
    s.append('path').datum(quarters).attr('class','indexed-trend').attr('data-series',spec.key).attr('d',d3.line().x(g=>x(g.name)).y(g=>y(index(g,spec)))).attr('fill','none').attr('stroke',spec.color).attr('stroke-width',3);
-   mark(s.selectAll('.indexed-'+spec.key).data(quarters).join('circle').attr('data-series',spec.key).attr('data-index',g=>index(g,spec)).attr('cx',g=>x(g.name)).attr('cy',g=>y(index(g,spec))).attr('r',small?4:5).attr('fill',spec.color).attr('stroke','var(--paper)').attr('stroke-width',1.5),g=>g.rows,g=>`${g.name}: ${spec.key==='share'?pct(g.share):fmt(g[spec.key])} ${spec.unit}; index ${fmt(index(g,spec))}. ${g.rows.length} captions.`).on('pointerenter',(_,g)=>select(g)).on('focus',(_,g)=>select(g));
+   mark(s.selectAll('.indexed-'+spec.key).data(quarters).join('circle').attr('data-series',spec.key).attr('data-index',g=>index(g,spec)).attr('cx',g=>x(g.name)).attr('cy',g=>y(index(g,spec))).attr('r',small?4:5).attr('fill',spec.color).attr('stroke','var(--paper)').attr('stroke-width',1.5),g=>g.rows,g=>`${g.name}: ${spec.key==='share'?pct(g.share):fmt(g[spec.key])} ${spec.unit}; index ${fmt(index(g,spec))}. ${g.rows.length} captions.`).on('pointermove',null).on('pointerleave',null).on('pointerenter',(_,g)=>select(g)).on('focus',(_,g)=>select(g));
    const last=quarters.at(-1),actual=spec.key==='share'?pct(last.share)+' of posts':fmt(last[spec.key])+' '+spec.unit;
-   if(!small){text(s,w-right+15,y(index(last,spec))-4,spec.name,'flagship-series','start',spec.color);text(s,w-right+15,y(index(last,spec))+20,actual,'flagship-title','start',spec.color)}
+   if(!small){text(endpointLabels,w-right+15,y(index(last,spec))-4,spec.name,'flagship-series','start',spec.color);text(endpointLabels,w-right+15,y(index(last,spec))+20,actual,'flagship-title','start',spec.color)}
   }
-  s.on('pointermove.index',event=>{const [mx]=d3.pointer(event,s.node());if(mx<left||mx>w-right)return;select(quarters.reduce((a,b)=>Math.abs(x(a.name)-mx)<Math.abs(x(b.name)-mx)?a:b));});
-  select(quarters.at(-1));
+  function inspectColumn(event){const [mx,my]=d3.pointer(event,s.node());if(mx<left||mx>w-right||my<top||my>bottom)return;select(quarters.reduce((a,b)=>Math.abs(x(a.name)-mx)<Math.abs(x(b.name)-mx)?a:b));}
+  s.on('pointermove.index',inspectColumn).on('pointerdown.index',inspectColumn).on('pointerleave.index',event=>{if(event.pointerType!=='touch'&&!s.node().contains(document.activeElement))reset()}).on('focusout.index',event=>{if(!s.node().contains(event.relatedTarget))reset()});
+  reset();
  }
  function drawFormat(){
   const {s,w,h,small}=frame('#format-chart'),left=small?100:190,gap=small?26:65,right=small?14:35,col=(w-left-right-gap)/2,top=108,row=(h-top-18)/8;

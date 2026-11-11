@@ -63,3 +63,9 @@
 .records-dialog.single-post .records-tools,.records-dialog.single-post #records-list,.records-dialog.single-post .record-count{display:none}
 .records-dialog.single-post .records-layout{grid-template-columns:minmax(0,1fr)}
 @media(min-width:741px){.records-dialog.single-post{width:min(800px,94vw)}}
+
+.post-annotation .example-selection{font:400 22px/1.4 var(--serif);margin:0 0 26px;color:var(--ink)}
+.post-annotation h3{font:400 28px/1.2 var(--serif);margin:0 0 20px}
+.trend-readout{pointer-events:none}
+.trend-value{font:500 11px var(--sans);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+@media(max-width:740px){.post-annotation .example-selection{font-size:21px;margin-bottom:24px}.post-annotation h3{font-size:26px}}

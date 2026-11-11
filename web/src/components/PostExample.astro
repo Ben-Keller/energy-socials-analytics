@@ -1,6 +1,6 @@
 ---
 import {imageAttributes} from '../responsive-images.js';
-const {post,takeaways,excerpt}=Astro.props;
+const {post,takeaways,excerpt,selectionReason}=Astro.props;
 const base=import.meta.env.BASE_URL.replace(/\/$/,'')+'/';
 const paragraphs=post.caption.split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean);
 const opening=paragraphs[0].match(/^[\s\S]+?[.!?](?=\s|$)/)?.[0]||paragraphs[0];
@@ -14,5 +14,5 @@ const date=new Date(post.date+'T00:00:00Z').toLocaleDateString('en-GB',{day:'num
 {post.image&&<button class="post-image-button" data-post={post.id} aria-label="Open the complete post"><img {...imageAttributes(post,base)} alt="Image accompanying this post" loading="lazy" decoding="async"/></button>}
 <div class="post-social-counts"><span><span class="reaction-icon" aria-hidden="true">👍</span> {post.reactions} reactions</span><span>{post.comments} comments</span></div><div class="post-card-footer"><button data-post={post.id}>Read full post</button><a href={post.source} target="_blank" rel="noopener noreferrer">View on LinkedIn ↗</a></div>
 </div>
-<aside class="post-annotation" aria-label="Three takeaways from this post"><h3>3 takeaways</h3><ol>{takeaways.map(t=><li>{t}</li>)}</ol></aside>
+<aside class="post-annotation" aria-label="Three takeaways from this post"><p class="example-selection">{selectionReason}</p><h3>3 takeaways</h3><ol>{takeaways.map(t=><li>{t}</li>)}</ol></aside>
 </article>
