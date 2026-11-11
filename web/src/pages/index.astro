@@ -45,7 +45,18 @@ const caseFor=key=>cases.find(c=>c.key===key);
 <section class="chapter" data-tone="light" id="formats"><div class="chapter-inner"><div class="chapter-heading"><span class="chapter-number" aria-hidden="true">03</span><div><h2>{report.recommendations[2].title}</h2></div></div>
 <RecommendationIntro index={2} />
 
-<div class="exhibit flagship-exhibit approach-exhibit"><h3 id="approach-title">Arguments and event reports receive four median comments overall; their relative performance varies by topic.</h3><div class="response-switch" role="tablist" aria-label="Response measure"><button role="tab" data-response-view="comments" data-title="Arguments and event reports receive four median comments overall; their relative performance varies by topic." aria-selected="true" aria-controls="comments-by-approach">Comments</button><button role="tab" data-response-view="reactions" data-title="Event reports lead on median reactions in five of seven topics; arguments lead in access and islands." aria-selected="false" aria-controls="reactions-by-approach">Reactions</button></div><div id="comments-by-approach" role="tabpanel" data-response-panel="comments"><p class="overall-comparison">Overall median comments: <strong>4</strong> for 98 arguments · <strong>4</strong> for 79 event reports</p><article class="embedded-analysis" id="f11" aria-label="Comments by topic and approach"><div class="figuretext" hidden></div></article><p class="chart-source">243 classified captions · one topic and writing approach per post</p></div><div id="reactions-by-approach" role="tabpanel" data-response-panel="reactions" hidden><p class="overall-comparison">Overall median reactions: <strong>66</strong> for 98 arguments · <strong>74</strong> for 79 event reports</p><article class="embedded-analysis" id="f10" aria-label="Reactions by topic and approach"><div class="figuretext" hidden></div></article><p class="chart-source">243 classified captions · one topic and writing approach per post</p></div></div>
+<section class="exhibit flagship-exhibit approach-exhibit" id="comments-by-approach" aria-labelledby="approach-comments-title">
+<h3 id="approach-comments-title">Arguments and event reports receive four median comments overall; their relative performance varies by topic.</h3>
+<p class="overall-comparison">Overall median comments: <strong>4</strong> for 98 arguments · <strong>4</strong> for 79 event reports</p>
+<article class="embedded-analysis" id="f11" aria-label="Comments by topic and approach"><div class="figuretext" hidden></div></article>
+<p class="chart-source">243 classified captions · one topic and writing approach per post</p>
+</section>
+<section class="exhibit flagship-exhibit approach-exhibit" id="reactions-by-approach" aria-labelledby="approach-reactions-title">
+<h3 id="approach-reactions-title">Event reports lead on median reactions in five of seven topics; arguments lead in access and islands.</h3>
+<p class="overall-comparison">Overall median reactions: <strong>66</strong> for 98 arguments · <strong>74</strong> for 79 event reports</p>
+<article class="embedded-analysis" id="f10" aria-label="Reactions by topic and approach"><div class="figuretext" hidden></div></article>
+<p class="chart-source">243 classified captions · one topic and writing approach per post</p>
+</section>
 
 <PostExample post={finance} takeaways={caseFor("finance").takeaways} excerpt={caseFor("finance").excerpt} selectionReason={caseFor("finance").selectionReason} />
 </div></section>
@@ -67,22 +78,37 @@ const caseFor=key=>cases.find(c=>c.key===key);
 </div></section>
 <section class="topic-evidence" id="topic-evidence" aria-labelledby="topic-evidence-title"><div class="topic-evidence-inner">
 <h2 id="topic-evidence-title">Topic and format comparisons</h2>
-<p class="topic-evidence-intro">Compare publishing choices and the response to individual posts.</p>
-<div class="evidence-switch" role="tablist" aria-label="Topic comparisons">
-<button id="evidence-response-tab" role="tab" aria-selected="true" aria-controls="evidence-response" data-evidence-view="response">Audience response</button>
-<button id="evidence-distribution-tab" role="tab" aria-selected="false" aria-controls="evidence-distribution" data-evidence-view="distribution" tabindex="-1">Topic distributions</button>
-<button id="evidence-mix-tab" role="tab" aria-selected="false" aria-controls="evidence-mix" data-evidence-view="mix" tabindex="-1">Topic mix</button>
-<button id="evidence-media-tab" role="tab" aria-selected="false" aria-controls="evidence-media" data-evidence-view="media" tabindex="-1">Post formats</button>
-<button id="evidence-formats-tab" role="tab" aria-selected="false" aria-controls="evidence-formats" data-evidence-view="formats" tabindex="-1">Writing approaches</button>
-<button id="evidence-connections-tab" role="tab" aria-selected="false" aria-controls="evidence-connections" data-evidence-view="connections" tabindex="-1">Topic connections</button>
+<div class="evidence-sequence">
+<section class="exhibit flagship-exhibit topic-flow-feature" id="topic-flow" aria-label="How topics become different kinds of posts">
+<h3>Arguments and event reports account for 73% of classified captions; opportunity and personal posts account for 7%.</h3>
+<article class="embedded-analysis" id="f13" aria-label="How topics become different kinds of posts"><div class="figuretext" hidden></div></article>
+<p class="chart-source">243 classified captions · one topic and writing approach per post</p>
+</section>
+<section class="exhibit flagship-exhibit topic-connection-feature" id="topic-connections" aria-label="Topics that appear together">
+<h3>AI, finance and grids form the most frequent connections across the six tracked subjects.</h3>
+<div id="network-chart" data-label="Topics that appear together: AI, finance and grids form the most frequent connections."></div>
+<p class="chart-source">221 captions with overlapping topic tags · ten most frequent connections</p>
+</section>
+<section class="exhibit flagship-exhibit" id="evidence-response" aria-label="Topic attention and discussion">
+<h3>Six of the seven main topics receive 60–75 median reactions, despite large differences in publishing volume.</h3>
+<article class="embedded-analysis" id="f08" aria-label="Topic attention and discussion, with ranked comparisons"><div class="figuretext" hidden></div></article>
+<p class="chart-source">243 classified captions · one topic and writing approach per post</p>
+</section>
+<section class="exhibit flagship-exhibit" id="evidence-distribution" aria-label="Topic distributions beyond the median">
+<h3>Within every main topic, the middle 50% spans a wider reaction range than the gap between topic medians.</h3>
+<article class="embedded-analysis" id="f23" aria-label="Topic distributions beyond the median"><div class="figuretext" hidden></div></article>
+<p class="chart-source">243 classified captions · one topic and writing approach per post</p>
+</section>
+<section class="exhibit flagship-exhibit" id="evidence-mix" aria-label="Topic mix and share of discussion">
+<h3>Response shares broadly follow publishing volume; finance and grids attract a larger share of discussion.</h3>
+<article class="embedded-analysis" id="f07" aria-label="Topic mix and share of discussion"><div class="figuretext" hidden></div></article>
+<p class="chart-source">243 classified captions · one topic and writing approach per post</p>
+</section>
+<section class="exhibit flagship-exhibit" id="evidence-media" aria-label="Response by post format">
+<h3>Identified to-camera videos lead on relative reactions; figure cards most often receive more comments than comparable image posts.</h3>
+<div id="formats-chart" data-label="Response by post format, compared with other image posts in the same quarter."></div>
+</section>
 </div>
-<div id="evidence-response" role="tabpanel" aria-labelledby="evidence-response-tab" data-evidence-panel="response"><div class="exhibit flagship-exhibit"><h3>Six of the seven main topics receive 60–75 median reactions, despite large differences in publishing volume.</h3><article class="embedded-analysis" id="f08" aria-label="Topic attention and discussion, with ranked comparisons"><div class="figuretext" hidden></div></article><p class="chart-source">243 classified captions · one topic and writing approach per post</p></div></div>
-<div id="evidence-distribution" role="tabpanel" aria-labelledby="evidence-distribution-tab" data-evidence-panel="distribution" hidden><div class="exhibit flagship-exhibit"><h3>Within every main topic, the middle 50% spans a wider reaction range than the gap between topic medians.</h3><article class="embedded-analysis" id="f23" aria-label="Topic distributions beyond the median"><div class="figuretext" hidden></div></article><p class="chart-source">243 classified captions · one topic and writing approach per post</p></div></div>
-<div id="evidence-mix" role="tabpanel" aria-labelledby="evidence-mix-tab" data-evidence-panel="mix" hidden><div class="exhibit flagship-exhibit"><h3>Response shares broadly follow publishing volume; finance and grids attract a larger share of discussion.</h3><article class="embedded-analysis" id="f07" aria-label="Topic mix and share of discussion"><div class="figuretext" hidden></div></article><p class="chart-source">243 classified captions · one topic and writing approach per post</p></div></div>
-<div id="evidence-media" role="tabpanel" aria-labelledby="evidence-media-tab" data-evidence-panel="media" hidden><div class="exhibit flagship-exhibit"><h3>Identified to-camera videos lead on relative reactions; figure cards most often receive more comments than comparable image posts.</h3><div id="formats-chart" data-label="Response by post format, compared with other image posts in the same quarter."></div></div></div>
-<div id="evidence-formats" role="tabpanel" aria-labelledby="evidence-formats-tab" data-evidence-panel="formats" hidden><div class="exhibit flagship-exhibit"><h3>Arguments and event reports account for 73% of classified captions; opportunity and personal posts account for 7%.</h3><article class="embedded-analysis" id="f13" aria-label="How topics become different kinds of posts"><div class="figuretext" hidden></div></article><p class="chart-source">243 classified captions · one topic and writing approach per post</p></div></div>
-<div id="evidence-connections" role="tabpanel" aria-labelledby="evidence-connections-tab" data-evidence-panel="connections" hidden><div class="exhibit flagship-exhibit"><h3>AI, finance and grids form the most frequent connections across the six tracked subjects.</h3><p class="chart-source">221 captions with overlapping topic tags</p><div class="network-layout"><div><div id="network-chart" data-label="AI, finance and grids are the most frequent topic connections."></div></div><div class="series-angles"><button data-pair="AI and digital|Finance and investment"><span>01 / AI & finance</span><strong>How should AI electricity infrastructure be financed?</strong><small>61 captions connect the subjects ↗</small></button><button data-pair="AI and digital|Technology and grids"><span>02 / AI & power systems</span><strong>How should grids allocate capacity to new AI demand?</strong><small>57 captions connect the subjects ↗</small></button><button data-pair="Finance and investment|Technology and grids"><span>03 / Finance & delivery</span><strong>Which financing terms prevent a project from proceeding?</strong><small>45 captions connect the subjects ↗</small></button></div></div>
-</div></div>
 </div></section>
 <section class="report-closing" id="conclusion" aria-labelledby="conclusion-title"><div class="closing-inner">
 <h2 id="conclusion-title">Key recommendations</h2>

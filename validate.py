@@ -38,7 +38,7 @@ print('Verified all 5,413 records, text chunks, original/repost attribution, 2,2
 report=json.loads((web/'src/report-data.json').read_text())
 assert len(report['posts'])==660 and len(report['recommendations'])==6
 page=(site/'index.html').read_text()
-for element in ['report-atlas','camera-chart','formats-chart','evidence-media-tab','conclusion-title']:
+for element in ['report-atlas','camera-chart','formats-chart','topic-flow','topic-connections','f10','f11','f08','f23','f07','conclusion-title']:
  assert f'id="{element}"' in page,element
 assert (site/'explore/index.html').is_file()
 for post in report['posts']:
@@ -50,4 +50,4 @@ standalone=(site/'Riad_Meddeb_Interactive_Report.html').read_text()
 assert 'class="standalone"' in standalone
 assert not re.search(r'<script[^>]+src=|<link rel="stylesheet"',standalone)
 assert not re.search(r'<img[^>]+srcset=',standalone)
-print('Verified the six-recommendation report, both new charts, full explorer, images, fonts and standalone download.')
+print('Verified the six-recommendation report, visible comparison charts, full explorer, images, fonts and standalone download.')

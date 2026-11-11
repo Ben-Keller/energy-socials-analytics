@@ -1,3 +1,4 @@
+import {revealCharts} from './chart-reveals.js';
 import {setImageAttributes} from './responsive-images.js';
 import {layout} from './layout.js';
 import analysisStyles from './analysis.css?url';
@@ -31,6 +32,7 @@ function draw(retain=new Set()){
  $('#text-index summary').textContent=`Browse this selection as an accessible text list (${current.rows.length})`;if($('#text-index').open)renderText($('#text-index>div'),current.rows);
  let empty=$('#no-results');if(!current.positions.size){if(!empty){empty=document.createElement('p');empty.id='no-results';empty.className='no-results';empty.textContent='No matching posts. Try another search or clear the filters.';stage.append(empty)}}else empty?.remove();
  if(focused&&focused!==defaultPreview&&!current.positions.has(focused.id))clearInspector();
+ revealCharts(stage,'atlas');
  performance.measure('atlas-width',{start,end:measured});performance.measure('atlas-calculation',{start:measured,end:calculated});performance.measure('atlas-axes',{start:calculated,end:axesDone});performance.measure('atlas-icons',{start:axesDone,end:iconsDone});performance.measure('atlas-layout',{start,end:performance.now()});
 }
 

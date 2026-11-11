@@ -1,3 +1,4 @@
+import {revealCharts} from './chart-reveals.js';
 import * as d3 from 'd3';
 import {median,statistic,captionRows,lengthBand,formatRows,tagRows,topicNames,approaches,tags} from './report-math.js';
 // SDG palette; colour is editorial grouping, not a claim that posts were SDG-coded.
@@ -147,9 +148,9 @@ export function createFlagshipCharts({posts:P,asset,openRows}){
   const notes=['Videos identified from saved previews · March–June 2026'];
   notes.forEach((t,i)=>sized(text(s,0,h-9+i*13,t,'flagship-small'),small?9:10));
  }
- // Hidden comparison panels are drawn on first use, then only when resized.
+ // Redraw only when the available chart size changes.
  const draws=[['#overview-chart',drawOverview],['#network-chart',drawNetwork],['#formats-chart',drawFormats],['#camera-chart',drawCamera]].map(([id,draw])=>{
-  let lastSize='';return ()=>{const host=$(id);if(!host||host.closest('[hidden]'))return;const size=host.clientWidth+':'+host.clientHeight;if(size===lastSize)return;draw();lastSize=size};
+  let lastSize='';return ()=>{const host=$(id);if(!host||host.closest('[hidden]'))return;const size=host.clientWidth+':'+host.clientHeight;if(size===lastSize)return;draw();revealCharts(host,id.slice(1));lastSize=size};
  });
  return {draws,hideTip};
 }

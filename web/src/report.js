@@ -29,18 +29,9 @@ const setupEmbedded=createAnalysis(nativeData,p=>openRows([byId.get(p.id)],'Sele
 const mountedCharts=new WeakSet();
 function mountVisibleCharts(){document.querySelectorAll('.embedded-analysis').forEach(host=>{if(!host.closest('[hidden]')&&!mountedCharts.has(host)){setupEmbedded(host);mountedCharts.add(host)}})}
 mountVisibleCharts();
-const responseTabs=[...document.querySelectorAll('[data-response-view]')];
-function selectResponse(button){responseTabs.forEach(tab=>{tab.setAttribute('aria-selected',tab===button);tab.tabIndex=tab===button?0:-1});document.querySelectorAll('[data-response-panel]').forEach(panel=>panel.hidden=panel.dataset.responsePanel!==button.dataset.responseView);const title=$('#approach-title');if(title&&button.dataset.title)title.textContent=button.dataset.title;mountVisibleCharts()}
-responseTabs.forEach(button=>button.addEventListener('click',()=>selectResponse(button)));
-selectResponse(responseTabs[0]);
-$('.response-switch').addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;event.preventDefault();const next=event.key==='Home'?responseTabs[0]:event.key==='End'?responseTabs.at(-1):responseTabs.find(tab=>tab.getAttribute('aria-selected')!=='true');selectResponse(next);next.focus()});
 const reportFrame=$('#report-explorer');let atlasObserver;
 function sizeReportAtlas(){const atlas=reportFrame.contentDocument?.querySelector('#atlas');if(!atlas)return;atlasObserver?.disconnect();atlasObserver=new ResizeObserver(()=>{const box=atlas.getBoundingClientRect();if(box.width>0)reportFrame.style.height=Math.ceil(box.height)+2+'px'});atlasObserver.observe(atlas)}
 reportFrame.addEventListener('load',sizeReportAtlas);if(reportFrame.contentDocument?.readyState==='complete')sizeReportAtlas();
-const evidenceTabs=[...document.querySelectorAll('[data-evidence-view]')];
-function selectEvidence(button){evidenceTabs.forEach(tab=>{tab.setAttribute('aria-selected',tab===button);tab.tabIndex=tab===button?0:-1});document.querySelectorAll('[data-evidence-panel]').forEach(panel=>panel.hidden=panel.dataset.evidencePanel!==button.dataset.evidenceView);mountVisibleCharts();requestAnimationFrame(()=>draws.forEach(draw=>draw()))}
-evidenceTabs.forEach(button=>button.addEventListener('click',()=>selectEvidence(button)));
-$('.evidence-switch').addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;event.preventDefault();const current=evidenceTabs.indexOf(document.activeElement),index=event.key==='Home'?0:event.key==='End'?evidenceTabs.length-1:(current+(event.key==='ArrowRight'?1:-1)+evidenceTabs.length)%evidenceTabs.length;selectEvidence(evidenceTabs[index]);evidenceTabs[index].focus()});
 const {draws}=createFlagshipCharts({posts:P,asset,openRows});draws.forEach(f=>f());let resizeFrame;let lastWidth=innerWidth;new ResizeObserver(()=>{if(Math.abs(innerWidth-lastWidth)<2)return;lastWidth=innerWidth;cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>draws.forEach(f=>f()))}).observe(document.body);
 addEventListener('scroll',hideTip,{passive:true});
 if(location.protocol==='file:'||document.documentElement.classList.contains('standalone'))document.documentElement.classList.add('standalone');
