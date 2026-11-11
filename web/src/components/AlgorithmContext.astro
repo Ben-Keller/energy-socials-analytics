@@ -1,0 +1,15 @@
+---
+import research from '../platform-research.json';
+const {base}=Astro.props;
+const sources=research.sources;
+---
+<section class="algorithm-context" aria-labelledby="algorithm-title">
+<h2 id="algorithm-title">Professional relevance shapes who sees a post</h2>
+<p>LinkedIn increasingly matches posts to readers’ professional interests, including beyond the author’s network. For Riad, the implication is to make the audience’s decision explicit, explain the evidence and invite informed discussion.</p>
+<ol class="algorithm-history">
+<li><a href={sources.li2020.url}>2020</a><span>Reading time joins explicit engagement signals.</span></li>
+<li><a href={sources.li2024.url}>2024</a><span>Attention is assessed against comparable content.</span></li>
+<li><a href={sources.profile.url}>2026</a><span>Topic, profile and activity guide discovery.</span></li>
+</ol>
+<p class="platform-reference"><a href={base+'research/'}>Platform research and implications</a> · reviewed {research.reviewed}</p>
+</section>

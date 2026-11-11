@@ -1,0 +1,20 @@
+.research-back{font:12px var(--sans)}
+.research-page{max-width:1156px;padding:55px 48px 70px;margin:auto}
+.research-page h1{font:400 58px/1.06 var(--serif);letter-spacing:-1.6px;max-width:850px;margin-bottom:18px}
+.research-date{font:11px/1.6 var(--sans);color:var(--muted);margin-bottom:27px}
+.research-lead{font:400 22px/1.55 var(--serif);max-width:900px}
+.research-scope{font:12px/1.8 var(--sans);color:var(--muted);max-width:900px;margin:24px 0 0}
+.research-page>section{margin-top:52px;padding-top:30px;border-top:1px solid var(--line)}
+.research-page h2{font:400 34px/1.18 var(--serif);letter-spacing:-.5px;margin-bottom:28px}
+.research-page h3{font:400 24px/1.22 var(--serif);margin-bottom:13px}
+.research-page article>p,.research-page article>div>p{font:13px/1.8 var(--sans);margin-bottom:12px}
+.research-page article p.platform-reference{font:10px/1.7 var(--sans);margin-bottom:0}
+.ranking-history>article{display:grid;grid-template-columns:135px 1fr;gap:35px;padding:24px 0;border-top:1px solid var(--line)}
+.history-year{font:400 23px/1.3 var(--serif);color:#00689d}
+.research-implication{color:var(--muted)}
+.research-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px 48px}
+.channel-research{padding:23px 0;border-top:1px solid var(--line);max-width:1000px}
+.proposal-assessment>article{display:grid;grid-template-columns:300px 1fr;gap:40px;padding:24px 0;border-top:1px solid var(--line)}
+.proposal-assessment h3{font-size:22px}.proposal-assessment p.assessment-decision{font-size:11px;color:#00689d;margin:0}.research-return{font:14px var(--sans);margin-top:35px}
+@media(max-width:740px){.research-page{padding:38px 24px 45px}.research-page h1{font-size:40px;letter-spacing:-.8px}.research-lead{font-size:20px}.research-page h2{font-size:29px}.research-page h3{font-size:23px}.ranking-history>article,.proposal-assessment>article{grid-template-columns:1fr;gap:12px}.history-year{font-size:21px}.research-grid{grid-template-columns:1fr;gap:25px}.research-page article>p,.research-page article>div>p{font-size:12px}.research-page>section{margin-top:35px;padding-top:24px}}
+@media print{.research-page{padding:0}.research-page article{break-inside:avoid}.research-page h1{font-size:40px}}

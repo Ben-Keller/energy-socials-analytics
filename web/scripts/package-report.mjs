@@ -21,6 +21,7 @@ const bundle=await build({entryPoints:[path.join(web,'src/report.js')],bundle:tr
 html=html.replace(/<script type="module" src="[^"]+"><\/script>/,()=>'<script>'+bundle.outputFiles[0].text.replace(/<\/script/gi,'<\\/script')+'</script>');
 html=html.replace('<html lang="en">','<html lang="en" class="standalone">').replace(/href="\/energy-socials-analytics\/"/g,'href="#top"');
 html=html.replace(/(<iframe id="report-explorer"[^>]*?) src="[^"]+"/, '$1');
+html=html.replaceAll('href="/energy-socials-analytics/research/', 'href="https://ben-keller.github.io/energy-socials-analytics/research/');
 const output=path.join(web,'dist/Riad_Meddeb_Interactive_Report.html');
 fs.writeFileSync(output,html);
 if(/<script[^>]+src=|<link rel="stylesheet"/.test(html))throw Error('External runtime asset remains');

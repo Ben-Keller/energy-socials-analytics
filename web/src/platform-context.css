@@ -1,0 +1,25 @@
+.algorithm-context{margin:32px 0 28px;max-width:100%;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.algorithm-context h2{font:400 26px/1.2 var(--serif);letter-spacing:-.2px;margin:0 0 11px}
+.algorithm-context>p:not(.platform-reference){max-width:850px;font:13px/1.7 var(--sans);margin:0 0 18px;color:var(--muted)}
+.algorithm-history{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin:0;padding:0;max-width:900px}
+.algorithm-history li{border-top:1px solid var(--line);padding-top:10px;display:grid;grid-template-columns:42px 1fr;gap:10px;align-items:start}
+.algorithm-history a{font:500 13px/1.6 var(--sans);text-decoration:none}.algorithm-history a:hover{text-decoration:underline}
+.algorithm-history span{font:12px/1.6 var(--sans);color:var(--muted)}
+.platform-reference{font:400 10px/1.7 var(--sans);color:var(--muted);margin:16px 0 0}.platform-reference a{text-decoration-thickness:.5px;text-underline-offset:3px}
+.campaign-actions{background:#fff}.campaign-intro{font:18px/1.55 var(--serif);max-width:810px;margin:0 0 32px}
+.content-actions{display:grid;grid-template-columns:1fr 1fr;gap:34px 52px}
+.content-actions article{border-top:1px solid var(--line);padding-top:24px}
+.campaign-actions h3{font:400 26px/1.2 var(--serif);margin:0 0 15px;max-width:800px}
+.content-actions p,.campaign-example>p:not(.platform-reference){font:13px/1.8 var(--sans);margin:0 0 14px;max-width:900px}
+.content-actions .action-evidence{font:11px/1.7 var(--sans);color:var(--muted);margin-bottom:0}
+.campaign-example,.partner-outcomes{margin-top:46px;padding-top:32px;border-top:1px solid var(--line)}
+.channel-treatments{margin-top:24px}
+.channel-treatments>article{display:grid;grid-template-columns:190px 1fr;gap:30px;padding:20px 0;border-top:1px solid var(--line)}
+.channel-treatments h4{font:400 23px/1.2 var(--serif);margin:0}
+.channel-treatments p{font:13px/1.8 var(--sans);margin:0 0 6px;max-width:740px}
+.channel-treatments span{font:500 11px/1.7 var(--sans);color:var(--muted)}
+.partner-outcomes>div{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.partner-outcomes h4{font:400 22px/1.2 var(--serif);margin:8px 0 12px}
+.partner-outcomes article p{font:12px/1.75 var(--sans);margin:0;color:var(--muted)}
+@media(max-width:740px){.algorithm-context{margin-top:26px;padding-bottom:20px}.algorithm-context h2{font-size:24px}.algorithm-history{gap:13px;grid-template-columns:1fr}.algorithm-history li{padding-top:8px;grid-template-columns:44px 1fr}.algorithm-history span{font-size:11px}.platform-reference{font-size:9px}.campaign-intro{font-size:18px}.content-actions{grid-template-columns:1fr;gap:26px}.campaign-actions h3{font-size:24px}.content-actions p,.campaign-example>p:not(.platform-reference),.channel-treatments p{font-size:12px}.channel-treatments>article{grid-template-columns:1fr;gap:10px;padding:19px 0}.channel-treatments h4{font-size:23px}.partner-outcomes>div{grid-template-columns:1fr;gap:22px}.partner-outcomes h4{margin:0 0 8px}.campaign-example,.partner-outcomes{margin-top:34px;padding-top:26px}}
+@media print{.algorithm-context,.content-actions article,.channel-treatments article,.partner-outcomes article{break-inside:avoid}}

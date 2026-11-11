@@ -3,8 +3,11 @@ import report from '../report-data.json';
 import cases from '../report-cases.json';
 import PostExample from '../components/PostExample.astro';
 import RecommendationIntro from '../components/RecommendationIntro.astro';
+import AlgorithmContext from '../components/AlgorithmContext.astro';
+import CampaignActions from '../components/CampaignActions.astro';
 import '../report.css';
 import '../report-explorers.css';
+import '../platform-context.css';
 const base=import.meta.env.BASE_URL.replace(/\/$/,'')+'/';
 const cooking=report.posts.find(p=>p.date==='2026-03-17'&&p.reactions===140);
 const jobs=report.posts.find(p=>p.date==='2026-04-21'&&p.reactions===193);
@@ -24,7 +27,7 @@ const caseFor=key=>cases.find(c=>c.key===key);
 <header class="masthead"><a class="wordmark" href={base} aria-label="Riad Meddeb Linkedin analysis — back to beginning"><span class="report-brand" aria-hidden="true">in</span></a><nav class="view-switch" role="tablist" aria-label="Report views"><button id="report-tab" role="tab" aria-controls="report-panel" aria-selected="true" data-view="report">Report</button><button id="explore-tab" role="tab" aria-controls="explorer-panel" aria-selected="false" data-view="explore" data-online>Explore all data</button></nav></header>
 <main id="report-panel" role="tabpanel" aria-labelledby="report-tab">
 
-<section class="report-hero" id="top"><h1>Riad Meddeb Linkedin analysis</h1><p class="archive-intro">Riad’s LinkedIn archive spans <strong>16 years</strong> and brings together <strong>5,413 posts and reposts</strong>. Since 2023 alone, it includes <strong>660 original posts</strong>: a substantial body of analysis on energy, finance, technology and development.</p></section>
+<section class="report-hero" id="top"><h1>Riad Meddeb Linkedin analysis</h1><AlgorithmContext base={base} /><p class="archive-intro">Riad’s LinkedIn archive spans <strong>16 years</strong> and brings together <strong>5,413 posts and reposts</strong>. Since 2023 alone, it includes <strong>660 original posts</strong>: a substantial body of analysis on energy, finance, technology and development.</p></section>
 <section class="primary-explorer" id="report-atlas" data-online aria-label="Interactive post archive"><iframe id="report-explorer" title="Interactive post archive with response map and post previews" src={base+'explore/?embedded=1&report=1'}></iframe></section>
 <div class="report-body">
 
@@ -110,17 +113,7 @@ const caseFor=key=>cases.find(c=>c.key===key);
 </section>
 </div>
 </div></section>
-<section class="report-closing" id="conclusion" aria-labelledby="conclusion-title"><div class="closing-inner">
-<h2 id="conclusion-title">Key recommendations</h2>
-<ol class="closing-points">
-<li><h3>{report.recommendations[0].title}</h3><p><strong>More substantive conversation.</strong> Explain one relationship—such as financing costs and affordable power—and make the opening, visual and conclusion develop it. Give readers a specific decision or trade-off to discuss.</p></li>
-<li><h3>{report.recommendations[1].title}</h3><p><strong>More shares and a recognizable body of work.</strong> Build a recurring series of clear visual comparisons around financing costs, useful electricity and who captures the jobs. Give each chart a finding-led title, direct labels and a source so readers can understand and reuse it.</p></li>
-<li><h3>{report.recommendations[2].title}</h3><p><strong>Better-quality comments and informed disagreement.</strong> Challenge a familiar assumption with evidence: cheap solar does not always mean cheap power; more capacity does not guarantee local jobs. State your position and ask a question that benefits from readers’ professional experience.</p></li>
-<li><h3>{report.recommendations[3].title}</h3><p><strong>More useful engagement beyond the event’s attendees.</strong> Report the revealing exchange, unresolved disagreement or finding while the event is unfolding. Give readers something they could not learn from the announcement, with institutional credit and links following the insight.</p></li>
-<li><h3>{report.recommendations[4].title}</h3><p><strong>More relevant followers and practical action.</strong> Explain where readers fit: a skill to acquire, a business opportunity to pursue or a decision to improve. Show who can benefit, what they can do next and which barriers employers, institutions or policymakers need to address.</p></li>
-<li><h3>{report.recommendations[5].title}</h3><p><strong>Stronger trust and deeper conversation.</strong> Explain what surprised you, what changed your view and which trade-off remains unresolved. Bring that personal judgement into analytical posts as well as reflections, and test more direct explanations to camera.</p></li>
-</ol>
-</div></section>
+<CampaignActions base={base} />
 
 </div></main>
 <section id="explorer-panel" role="tabpanel" aria-labelledby="explore-tab" hidden><iframe id="full-explorer" title="Comprehensive post archive and analysis" data-src={base+'explore/?embedded=1#atlas'}></iframe></section>

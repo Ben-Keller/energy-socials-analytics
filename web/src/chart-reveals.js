@@ -2,7 +2,8 @@
 const records = new WeakMap();
 const jobs = new Set();
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
-const ease = 'cubic-bezier(.22,.68,.2,1)';
+const ease = 'cubic-bezier(.37,0,.22,1)';
+let flowMaskId = 0;
 const enabled = typeof IntersectionObserver !== 'undefined' && typeof Element.prototype.animate === 'function';
 const observer = enabled ? new IntersectionObserver(entries => {
   for (const entry of entries) if (entry.isIntersecting) {
@@ -15,6 +16,8 @@ function finish(job, seen = true) {
   observer?.unobserve(job.element);
   for (const animation of job.animations) animation.cancel();
   job.animations.length = 0;
+  for (const cleanup of job.cleanups) cleanup();
+  job.cleanups.length = 0;
   job.element.style.opacity = job.opacity;
   job.element.dataset.revealState = 'complete';
   job.element.removeEventListener('pointerdown', job.interact, true);
@@ -51,7 +54,7 @@ export function revealCharts(host, kind) {
   if (record.started || !enabled || motion.matches) { record.started = true; return; }
   const elements = kind === 'atlas' ? [host] : [...host.querySelectorAll('svg[role="group"], .matrix-cards')];
   elements.forEach((element, index) => {
-    const job = {element, record, type: typeFor(kind, index), opacity: element.style.opacity, animations: [], playing: false};
+    const job = {element, record, type: typeFor(kind, index), opacity: element.style.opacity, animations: [], cleanups: [], playing: false};
     job.interact = () => finish(job);
     element.style.opacity = '0';
     element.dataset.revealState = 'pending';
@@ -73,7 +76,8 @@ function play(job) {
   const all = selector => [...root.querySelectorAll(selector)];
   const opacity = element => Number(getComputedStyle(element).opacity);
   const animate = (element, frames, duration = 650, delay = 0) => {
-    job.animations.push(element.animate(frames, {duration, delay, easing: ease, fill: 'backwards'}));
+    const pace = type === 'flow' ? 1 : 1.3;
+    job.animations.push(element.animate(frames, {duration: duration * pace, delay: delay * pace, easing: ease, fill: 'backwards'}));
   };
   const fade = (element, delay = 0, duration = 500) => animate(element, [{opacity: 0}, {opacity: opacity(element)}], duration, delay);
   const box = element => element.getBBox();
@@ -111,8 +115,40 @@ function play(job) {
         circles.forEach(element => fade(element, 120 + progress(element) * 850, 350));
         labels.forEach(element => fade(element, element.closest('.trend-endpoints') ? 930 : 60, 450));
       } else if (type === 'flow') {
-        all('path[role="button"]').forEach(element => sweep(element, progress(element, 'y') * 200, 1050));
-        all('g[role="button"]').forEach(element => fade(element, progress(element) < .5 ? 0 : 650, 500));
+        // Follow each ribbon's centreline instead of wiping across the whole diagram.
+        const ns = 'http://www.w3.org/2000/svg';
+        const defs = document.createElementNS(ns, 'defs');
+        root.append(defs);
+        job.cleanups.push(() => defs.remove());
+        const nodes = all('g[data-flow-side]');
+        const sources = nodes.filter(element => element.dataset.flowSide === 'source');
+        const order = new Map(sources.map((element, i) => [element.dataset.flowName, i]));
+        const branches = new Map(), arrivals = new Map();
+        all('path[role="button"]').forEach(element => {
+          const source = element.dataset.flowSource, target = element.dataset.flowTarget;
+          const branch = branches.get(source) || 0;
+          branches.set(source, branch + 1);
+          const delay = 140 + (order.get(source) || 0) * 160 + branch * 22;
+          arrivals.set(target, Math.min(arrivals.get(target) ?? Infinity, delay + 1300));
+          if (!element.dataset.flowCenter) { sweep(element, delay, 1750); return; }
+          const mask = document.createElementNS(ns, 'mask');
+          const id = 'flow-reveal-' + ++flowMaskId;
+          for (const [name, value] of Object.entries({id, maskUnits: 'userSpaceOnUse', x: 0, y: 0, width, height})) mask.setAttribute(name, value);
+          const ink = document.createElementNS(ns, 'path');
+          ink.setAttribute('d', element.dataset.flowCenter);
+          ink.setAttribute('fill', 'none');
+          ink.setAttribute('stroke', 'white');
+          ink.setAttribute('stroke-width', Number(element.dataset.flowWidth) + 3);
+          ink.setAttribute('stroke-linecap', 'round');
+          mask.append(ink); defs.append(mask);
+          const originalMask = element.getAttribute('mask');
+          element.setAttribute('mask', `url(#${id})`);
+          job.cleanups.push(() => originalMask === null ? element.removeAttribute('mask') : element.setAttribute('mask', originalMask));
+          const length = ink.getTotalLength();
+          animate(ink, [{strokeDasharray: `${length} ${length}`, strokeDashoffset: length, opacity: 0}, {strokeDasharray: `${length} ${length}`, strokeDashoffset: 0, opacity: 1}], 1750, delay);
+          fade(element, delay, 350);
+        });
+        nodes.forEach(element => fade(element, element.dataset.flowSide === 'source' ? (order.get(element.dataset.flowName) || 0) * 90 : arrivals.get(element.dataset.flowName) || 1500, 480));
       } else if (type === 'network') {
         circles.forEach((element, i) => grow(element, i * 55, 620));
         all('path[role="button"], line[role="button"]').forEach((element, i) => trace(element, 160 + i * 28, 850));
