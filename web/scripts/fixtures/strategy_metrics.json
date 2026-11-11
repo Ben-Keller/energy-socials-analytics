@@ -1,0 +1,237 @@
+{
+  "annual": [
+    {
+      "year": "2024",
+      "n": 154,
+      "rx": 64.0,
+      "cm": 1.0,
+      "three": 35,
+      "share": 0.22727272727272727,
+      "words": 45.0
+    },
+    {
+      "year": "2025",
+      "n": 141,
+      "rx": 69,
+      "cm": 3,
+      "three": 86,
+      "share": 0.6099290780141844,
+      "words": 223
+    },
+    {
+      "year": "2026",
+      "n": 147,
+      "rx": 45,
+      "cm": 3,
+      "three": 74,
+      "share": 0.5034013605442177,
+      "words": 263
+    }
+  ],
+  "length": [
+    {
+      "year": "2025",
+      "band": "Under 100",
+      "n": 21,
+      "rx": 34,
+      "cm": 1,
+      "three": 3,
+      "share": 0.14285714285714285,
+      "words": 17
+    },
+    {
+      "year": "2025",
+      "band": "100 to 249",
+      "n": 86,
+      "rx": 71.0,
+      "cm": 3.0,
+      "three": 54,
+      "share": 0.627906976744186,
+      "words": 192.0
+    },
+    {
+      "year": "2025",
+      "band": "250 or more",
+      "n": 71,
+      "rx": 67,
+      "cm": 3,
+      "three": 46,
+      "share": 0.647887323943662,
+      "words": 293
+    },
+    {
+      "year": "2026",
+      "band": "Under 100",
+      "n": 23,
+      "rx": 27,
+      "cm": 1,
+      "three": 4,
+      "share": 0.17391304347826086,
+      "words": 11
+    },
+    {
+      "year": "2026",
+      "band": "100 to 249",
+      "n": 40,
+      "rx": 39.5,
+      "cm": 2.0,
+      "three": 16,
+      "share": 0.4,
+      "words": 207.5
+    },
+    {
+      "year": "2026",
+      "band": "250 or more",
+      "n": 84,
+      "rx": 55.5,
+      "cm": 3.0,
+      "three": 54,
+      "share": 0.6428571428571429,
+      "words": 313.5
+    }
+  ],
+  "cells": [
+    {
+      "topic": "Finance",
+      "year": "All",
+      "approach": "Insight or argument",
+      "n": 7,
+      "rx": 68,
+      "cm": 6,
+      "three": 5,
+      "share": 0.7142857142857143,
+      "words": 258
+    },
+    {
+      "topic": "Finance",
+      "year": "All",
+      "approach": "Event reporting",
+      "n": 21,
+      "rx": 73,
+      "cm": 2,
+      "three": 10,
+      "share": 0.47619047619047616,
+      "words": 245
+    },
+    {
+      "topic": "Finance",
+      "year": "2025",
+      "approach": "Insight or argument",
+      "n": 5,
+      "rx": 67,
+      "cm": 5,
+      "three": 3,
+      "share": 0.6,
+      "words": 258
+    },
+    {
+      "topic": "Finance",
+      "year": "2025",
+      "approach": "Event reporting",
+      "n": 11,
+      "rx": 73,
+      "cm": 2,
+      "three": 4,
+      "share": 0.36363636363636365,
+      "words": 253
+    },
+    {
+      "topic": "Finance",
+      "year": "2026",
+      "approach": "Insight or argument",
+      "n": 1,
+      "rx": 68,
+      "cm": 7,
+      "three": 1,
+      "share": 1.0,
+      "words": 310
+    },
+    {
+      "topic": "Finance",
+      "year": "2026",
+      "approach": "Event reporting",
+      "n": 4,
+      "rx": 46.0,
+      "cm": 2.5,
+      "three": 2,
+      "share": 0.5,
+      "words": 327.0
+    },
+    {
+      "topic": "AI and digital",
+      "year": "All",
+      "approach": "Insight or argument",
+      "n": 28,
+      "rx": 47.5,
+      "cm": 3.0,
+      "three": 15,
+      "share": 0.5357142857142857,
+      "words": 219.5
+    },
+    {
+      "topic": "AI and digital",
+      "year": "All",
+      "approach": "Event reporting",
+      "n": 17,
+      "rx": 71,
+      "cm": 4,
+      "three": 10,
+      "share": 0.5882352941176471,
+      "words": 296
+    },
+    {
+      "topic": "AI and digital",
+      "year": "2025",
+      "approach": "Insight or argument",
+      "n": 14,
+      "rx": 48.5,
+      "cm": 3.0,
+      "three": 8,
+      "share": 0.5714285714285714,
+      "words": 198.5
+    },
+    {
+      "topic": "AI and digital",
+      "year": "2025",
+      "approach": "Event reporting",
+      "n": 6,
+      "rx": 63.0,
+      "cm": 3.0,
+      "three": 3,
+      "share": 0.5,
+      "words": 304.5
+    },
+    {
+      "topic": "AI and digital",
+      "year": "2026",
+      "approach": "Insight or argument",
+      "n": 14,
+      "rx": 46.0,
+      "cm": 2.5,
+      "three": 7,
+      "share": 0.5,
+      "words": 280.0
+    },
+    {
+      "topic": "AI and digital",
+      "year": "2026",
+      "approach": "Event reporting",
+      "n": 8,
+      "rx": 74.0,
+      "cm": 3.5,
+      "three": 5,
+      "share": 0.625,
+      "words": 306.0
+    }
+  ],
+  "finance_without_highest_comment_post": {
+    "n": 6,
+    "rx": 67.5,
+    "cm": 5.5,
+    "three": 4,
+    "share": 0.6666666666666666,
+    "words": 281.5
+  },
+  "source": "github-pages/web/data/source.json",
+  "date": "6 October 2026 UTC"
+}

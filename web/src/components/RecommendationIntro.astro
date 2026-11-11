@@ -1,0 +1,5 @@
+---
+import narratives from '../report-narratives.json';
+const {index}=Astro.props;
+---
+<p class="recommendation-intro">{narratives[index].map(part=>typeof part==='string'?part:<a href={part.href} target="_blank" rel="noopener noreferrer">{part.text}</a>)}</p>

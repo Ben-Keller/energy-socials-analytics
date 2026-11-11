@@ -6,3 +6,6 @@ web/node_modules/
 
 web/dist/
 web/.astro/
+
+# Built downloads are generated from the report source.
+web/public/Riad_Meddeb_Interactive_Report.html

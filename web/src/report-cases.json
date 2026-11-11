@@ -1,0 +1,98 @@
+[
+  {
+    "key": "hydrogen",
+    "chapter": "depth",
+    "number": "01",
+    "label": "One decision",
+    "date": "2026-01-19",
+    "reactions": 200,
+    "insight": "The hydrogen post makes the reader weigh two outcomes: domestic development or another resource divide. Water, electricity and jobs become evidence for that one decision.",
+    "change": "Keep the analysis, but make every paragraph answer the same question. Put the difficult choice before the market overview.",
+    "excerpt": "Water availability, energy access needs, land use, and national development priorities must guide decisions.",
+    "takeaways": [
+      "Open with a decision that has consequences. The development-or-divide question gives readers a position to assess before the technical detail.",
+      "Use numbered conditions to test the same choice. Water, electricity and domestic value each help assess whether hydrogen suits a country’s development priorities.",
+      "Return to the opening decision. The conclusion makes local value the condition for success, giving readers a criterion they can apply to other projects."
+    ]
+  },
+  {
+    "key": "cooking",
+    "chapter": "stakes",
+    "number": "02",
+    "label": "One visual comparison",
+    "date": "2026-03-17",
+    "reactions": 140,
+    "insight": "The clean-cooking post makes a neglected issue economically consequential: trillions in annual losses against billions in investment. The mismatch is the argument.",
+    "change": "Put that comparison in the visual, with direct labels and sources. Use the caption to explain the policy choices instead of making readers find the key numbers.",
+    "excerpt": "Dirty cooking costs the global economy an estimated $2.4 to $4 trillion each year through health impacts, environmental damage, and lost productivity. Yet global investment in clean cooking remains around $2.5 billion annually, less than a third of what is needed.",
+    "takeaways": [
+      "Use a comparison that changes the scale of the issue. Annual losses in trillions beside investment in billions make the financing gap immediately apparent.",
+      "Turn the numerical gap into a question of priorities. Readers can assess the investment decision as well as the size of the problem.",
+      "Make that comparison the basis of a dedicated visual. Label the annual estimates and their sources, then explain what additional investment could achieve."
+    ]
+  },
+  {
+    "key": "finance",
+    "chapter": "formats",
+    "number": "03",
+    "label": "A clear argument",
+    "date": "2025-07-01",
+    "reactions": 118,
+    "insight": "Cheap clean technology can still leave countries with unaffordable finance. This post challenges that assumption before introducing the conference, giving readers a position to contest rather than an attendance update.",
+    "change": "Make the contested decision the headline. Support it with financing choices readers can assess, such as guarantees, subsidy reform or debt swaps.",
+    "excerpt": "The energy transition can either deepen inequality or drive inclusive development. The difference lies in how we choose to finance it.",
+    "takeaways": [
+      "Use an event to introduce a consequential argument. The debt question gives readers a position to assess before the conference is mentioned.",
+      "Connect proposed reforms to concrete examples. Subsidy figures and a named debt swap make the financing options specific enough to question or develop.",
+      "Make the post complete before linking out. The financing choices remain understandable to readers who do not open the longer article."
+    ]
+  },
+  {
+    "key": "event",
+    "chapter": "events",
+    "number": "04",
+    "label": "What the event revealed",
+    "date": "2026-04-14",
+    "reactions": 95,
+    "insight": "The Youth Forum post identifies a bottleneck: whether institutions enable young builders. It turns the event into an explanation of what prevents promising ideas from scaling.",
+    "change": "Lead with what the discussion clarified, then use examples from the room as evidence. Move names, venues and acknowledgements below the finding.",
+    "excerpt": "Young people are not waiting to be included in the transition. They are already building it. The task now is to align systems around them so their solutions can deliver at scale.",
+    "takeaways": [
+      "Lead with what the session clarified. Putting the question about innovation systems before the venue and speakers makes the report relevant beyond its attendees.",
+      "Ground each reflection in a concrete example. Cases from different countries let readers examine the basis for the broader conclusion.",
+      "Leave a specific question for readers to answer. Asking which institutions help young builders would extend the analysis beyond the event."
+    ]
+  },
+  {
+    "key": "jobs",
+    "chapter": "opportunity",
+    "number": "05",
+    "label": "Who benefits",
+    "date": "2026-04-21",
+    "reactions": 193,
+    "insight": "The jobs post asks who will capture the value of the transition, then names the skills, industries and policy choices that determine the answer. Employment becomes a question of who benefits, not a generic promise.",
+    "change": "Put the reader’s route to benefit first: a skill, role, application step or investment decision. Introduce the initiative and its partners after that.",
+    "excerpt": "Without deliberate policy, the transition risks concentrating value in a few markets, while others remain locked into extraction and low-value assembly instead of capturing innovation and industrial growth.",
+    "takeaways": [
+      "Turn employment growth into a question of who gains. The distribution of value gives workers, businesses and policymakers a reason to examine the trend.",
+      "Name the decisions that shape the outcome. Skills, industrial strategy and investment frameworks connect the employment argument to choices readers can influence.",
+      "Connect the global trend to a defined group. The shift from millions of jobs to coal workers in Bosnia and Herzegovina makes the consequences concrete."
+    ]
+  },
+  {
+    "key": "personal",
+    "chapter": "personal",
+    "number": "06",
+    "label": "Personal judgement",
+    "date": "2026-04-25",
+    "reactions": 63,
+    "insight": "The Sarajevo reflection uses 25 years of experience to explain why the next generation’s choices matter personally. It ends with a real uncertainty: whether young people can build a future locally.",
+    "change": "Use first person to explain a judgement, an experience or an unresolved question. Let the reader see why the issue matters to the author.",
+    "excerpt": "Because the future of the transition will depend on whether young people see that they can build that future here.",
+    "takeaways": [
+      "Use experience to explain the basis of a judgement. The career reflection leads to a specific claim about what the next generation needs.",
+      "Bring the central tension forward. The prospect of young people leaving gives the reflection a consequence that readers can assess.",
+      "Close on an unresolved question. Whether young people can build a future locally gives readers room to contribute their own experience."
+    ]
+  }
+]

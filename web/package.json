@@ -3,10 +3,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "python3 prepare.py && astro build && python3 finalize.py"
+    "dev": "astro dev --host 127.0.0.1 --port 4321",
+    "build": "astro build && node scripts/package-report.mjs",
+    "verify": "node scripts/verify-report.mjs",
+    "preview": "astro preview --host 127.0.0.1 --port 4321"
   },
   "dependencies": {
     "astro": "7.3.5",
-    "d3": "7.9.0"
+    "d3": "7.9.0",
+    "esbuild": "0.25.12"
   }
 }

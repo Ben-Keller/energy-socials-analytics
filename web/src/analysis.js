@@ -1,12 +1,13 @@
 import * as d3 from 'd3';
 import catalog from './catalog.json';
-export function createAnalysis(data,showPost,loadDetail){
+import {SDG,YEAR_COLORS} from './report-palette.js';
+export function createAnalysis(data,showPost,loadDetail,options={}){
 /* D3 7.9.0 is the only chart renderer. Every report SVG is produced here in the HTML. */
 const D=data, F=catalog.filter(f=>!['f17','f18'].includes(f.id));
 const S=D.originalAnalysis,P=D.posts,A=D.originalRecords,C=A.filter(d=>d.caption_eligible),R=A.filter(d=>d.ranking_eligible);
-const ink='#10253F',muted='#485B70',grid='#D9E2EB',blue='#00689D',red='#E5243B',paper='#FFFFFF';
+const ink=SDG.navy,muted='#526B7A',grid='#CBD7DF',blue='#00689D',red='#E5243B',paper='#FFFFFF';
 const TN=S.topic_names,AN=S.approach_names, topics=Object.keys(TN), approaches=Object.keys(AN), years=['2023','2024','2025','2026'];
-const TC=Object.fromEntries(topics.map(t=>[t,D.colors[TN[t]]])), AC=Object.fromEntries(approaches.map((a,i)=>[a,[blue,'#4C9F38',red,'#FCC30B','#DD1367','#FD6925'][i]])),YC={'2023':'#FCC30B','2024':'#00689D','2025':'#E5243B','2026':'#4C9F38'};
+const TC=Object.fromEntries(topics.map(t=>[t,D.colors[TN[t]]])), AC=Object.fromEntries(approaches.map((a,i)=>[a,[blue,'#4C9F38',red,'#FCC30B','#DD1367','#FD6925'][i]])),YC=YEAR_COLORS;
 const index=new Map(P.map(d=>[d.id,d])); const fmt=v=>v==null?'—':Number.isInteger(v)?String(v):d3.format('.1f')(v);
 const med=(arr,k)=>d3.median(arr,d=>+d[k]); const group=(arr,key)=>Array.from(d3.group(arr,d=>d[key]),([key,values])=>({key,values}));
 function txt(g,x,y,text,size=20,fill=ink,weight=400,anchor='start'){return g.append('text').attr('x',x).attr('y',y).attr('font-size',size).attr('fill',fill).attr('font-weight',weight).attr('text-anchor',anchor).text(text)}
@@ -67,11 +68,13 @@ let exploreYear='all';
 const explorers=[];
 const hover=d3.select('body').append('div').attr('class','data-tooltip').attr('hidden',true).attr('role','tooltip');
 function openRowsDialog(rows,label){
+ if(options.openRows){options.openRows(rows,label);return;}
  const dlg=document.querySelector('#records-dialog');d3.select('#records-title').text(label);d3.select('#records-count').text(`${rows.length} underlying records · select a post to read its caption`);
  const list=d3.select('#records-list');list.html('');rows.forEach(p=>{const b=list.append('button').attr('class','record-row').on('click',()=>{dlg.close();showPost(p)});const t=b.append('span');t.append('small').text(`${p.date} · #${p.index}`);t.append('strong').text(p.title);t.append('small').text(`${fmt(p.reactions)} reactions · ${fmt(p.comments)} comments`)});
  document.querySelector('#records-download').onclick=async()=>{const complete=typeof loadDetail==='function'?await Promise.all(rows.map(async p=>({...p,...await loadDetail(p)}))):rows;const csv=d3.csvFormat(complete.map(p=>({index:p.index,date:p.date,title:p.title,caption:p.caption,topic:p.topic,approach:p.approach,reactions:p.reactions,comments:p.comments,url:p.source})));saveBlob(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}),'selected-posts.csv')};dlg.showModal();dlg.scrollTop=0;
 }
-const records=d3.select('body').append('dialog').attr('id','records-dialog').attr('aria-labelledby','records-title');records.append('button').attr('class','close').attr('aria-label','Close records').text('Close ×').on('click',()=>records.node().close());records.append('h2').attr('id','records-title');records.append('p').attr('id','records-count');records.append('button').attr('id','records-download').text('Download these records');records.append('div').attr('id','records-list');
+if(!options.openRows){const records=d3.select('body').append('dialog').attr('id','records-dialog').attr('aria-labelledby','records-title');records.append('button').attr('class','close').attr('aria-label','Close records').text('Close ×').on('click',()=>records.node().close());records.append('h2').attr('id','records-title');records.append('p').attr('id','records-count');records.append('button').attr('id','records-download').text('Download these records');records.append('div').attr('id','records-list');}
+
 function addSelection(v,label,rows,value){v.selection.html('');v.selection.append('strong').text(label);if(value)v.selection.append('span').text(value);v.selection.append('button').text(`Read ${rows.length} posts →`).property('disabled',!rows.length).on('click',()=>openRowsDialog(rows,label));}
 function mark(sel,v,label,rows,value){sel.attr('tabindex',0).attr('role','button').attr('aria-label',label+' · '+value+' · inspect records').style('cursor','pointer').on('pointerenter',e=>{hover.text(label+' · '+value).attr('hidden',null);const box=hover.node().getBoundingClientRect();hover.style('left',Math.max(8,Math.min(e.clientX+12,innerWidth-box.width-8))+'px').style('top',Math.max(8,Math.min(e.clientY+12,innerHeight-box.height-8))+'px');}).on('pointerleave',()=>hover.attr('hidden',true)).on('click',()=>{hover.attr('hidden',true);if(rows.length===1)showPost(rows[0]);else openRowsDialog(rows,label)}).on('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();if(rows.length===1)showPost(rows[0]);else openRowsDialog(rows,label)}});return sel}
 function base(v,h=330){const w=Math.max(260,Math.round(v.chart.node().clientWidth));const s=v.chart.append('svg').attr('viewBox',`0 0 ${w} ${h}`).attr('width',w).attr('height',h).attr('aria-label',v.spec.title+' interactive exploration').attr('role','group');s.append('rect').attr('width',w).attr('height',h).attr('fill','white');return {s,w,h}}
@@ -104,7 +107,7 @@ function scatterExplore(v,rows,xkey,metric){const {s,w,h}=base(v,360),x=d3.scale
 function distribution(v,rows,metric){
  v.chart.append('p').attr('class','chart-reading-guide').text('Dot = one post · Band = middle 50% · Dark line = median');
  const groups=d3.groups(rows,p=>p.topic).sort((a,b)=>(medianOf(b[1],metric)??-1)-(medianOf(a[1],metric)??-1)),{s,w}=base(v,groups.length*94+45),x=d3.scaleLinear().domain([0,d3.max(rows,p=>p[metric])||1]).range([16,w-20]);
- groups.forEach(([name,posts],i)=>{const y=22+i*94,known=posts.filter(p=>numeric(p,metric)),values=known.map(p=>p[metric]).sort(d3.ascending),m=medianOf(posts,metric);label(s,16,y,name,12,ink,'start',600);label(s,16,y+17,`median ${fmt(m)} · n=${known.length}`,11,muted);known.forEach((p,j)=>mark(s.append('circle').attr('cx',x(p[metric])).attr('cy',y+45+((j*7)%13-6)).attr('r',3.5).attr('fill','#8196A6').attr('opacity',.45),v,p.title,[p],`${p[metric]} ${metric}`));if(m!=null){const q1=d3.quantile(values,.25),q3=d3.quantile(values,.75);mark(s.append('rect').attr('x',x(q1)).attr('y',y+34).attr('width',Math.max(2,x(q3)-x(q1))).attr('height',22).attr('fill',metric==='comments'?'#89949D':'#526B7C').attr('opacity',.8),v,name,known,`Middle 50%: ${fmt(q1)}–${fmt(q3)} · median ${fmt(m)}`);s.append('line').attr('x1',x(m)).attr('x2',x(m)).attr('y1',y+29).attr('y2',y+61).attr('stroke',ink).attr('stroke-width',3)}});
+ groups.forEach(([name,posts],i)=>{const y=22+i*94,known=posts.filter(p=>numeric(p,metric)),values=known.map(p=>p[metric]).sort(d3.ascending),m=medianOf(posts,metric);label(s,16,y,name,12,ink,'start',600);label(s,16,y+17,`median ${fmt(m)} · n=${known.length}`,11,muted);known.forEach((p,j)=>mark(s.append('circle').attr('cx',x(p[metric])).attr('cy',y+45+((j*7)%13-6)).attr('r',3.5).attr('fill',D.colors[name]||blue).attr('opacity',.6),v,p.title,[p],`${p[metric]} ${metric}`));if(m!=null){const q1=d3.quantile(values,.25),q3=d3.quantile(values,.75);mark(s.append('rect').attr('x',x(q1)).attr('y',y+34).attr('width',Math.max(2,x(q3)-x(q1))).attr('height',22).attr('fill',D.colors[name]||blue).attr('opacity',.3),v,name,known,`Middle 50%: ${fmt(q1)}–${fmt(q3)} · median ${fmt(m)}`);s.append('line').attr('x1',x(m)).attr('x2',x(m)).attr('y1',y+29).attr('y2',y+61).attr('stroke',ink).attr('stroke-width',3)}});
  s.append('g').attr('transform',`translate(0,${groups.length*94+10})`).call(d3.axisBottom(x).ticks(5));v.insight.text('Dots are individual posts. The band spans the middle 50%; the dark line is the median. Select a dot to read a post, or a band to inspect its topic.');
 }
 
@@ -139,7 +142,7 @@ function setupExplorer(article){const spec=F.find(f=>f.id===article.id),a=d3.sel
  else if(['f06','f22'].includes(id)){source=rankRows;render=rows=>tiles(v,[...rows].sort((a,b)=>a.rank-b.rank).slice(0,id==='f06'?10:24),'rank',null);}
  else if(id==='f07'){render=rows=>composition(v,rows,'topic');}
  else if(id==='f09'){const m=metric();render=rows=>{v.categoryOrder=d3.groups(rows,p=>p.approach).sort((a,b)=>b[1].length-a[1].length).map(g=>g[0]);categoryBars(v,rows,'approach',m(),'name')};}
- else if(id==='f08'){render=rows=>{topicMap(v,rows);v.chart.append('h3').attr('class','comparison-heading').text('Ranked topic comparisons');pairedPanels(v,['reactions','comments'],key=>categoryBars(v,rows,'topic',key,'value',key==='comments'?'#89949D':'#526B7C'));v.insight.text('Map and rankings use the same selected captions. Each ranking sorts from highest to lowest median; select a topic in any view to inspect its posts.');};}
+ else if(id==='f08'){render=rows=>{topicMap(v,rows);v.chart.append('h3').attr('class','comparison-heading').text('Ranked topic comparisons');pairedPanels(v,['reactions','comments'],key=>categoryBars(v,rows,'topic',key,'value',null));v.insight.text('Map and rankings use the same selected captions. Each ranking sorts from highest to lowest median; select a topic in any view to inspect its posts.');};}
  else if(['f10','f11'].includes(id)){render=rows=>matrix(v,rows,'topic','approach',id==='f10'?'reactions':'comments');}
  else if(id==='f12'){const m=metric();render=rows=>{v.scope.text(`Full recovered range · ${years[0]}–${years[years.length-1]} · ${rows.length} previously classified original captions`);matrix(v,rows,'approach','year',m());v.insight.text('All four years shown together for the classified subset. Blank cells have fewer than three known observations.');};}
  else if(id==='f13'){render=rows=>topicFlow(v,rows);}
@@ -192,7 +195,7 @@ function topicMap(v,rows){
 function pairedPanels(v,keys,draw){
  const original={chart:v.chart,key:v.key,insight:v.insight};
  const grid=original.chart.append('div').attr('class','paired-metrics');
- try{keys.forEach(key=>{const panel=grid.append('section').attr('class','metric-panel').attr('data-metric',key);panel.append('h3').text(key==='reactions'?'Reactions':key==='comments'?'Comments':escMetric[key]||key);v.chart=panel.append('div').attr('class','metric-plot');v.key=panel.append('div').attr('class','data-key');v.insight=panel.append('p').attr('class','data-insight');draw(key)});}finally{Object.assign(v,original)}
+ try{keys.forEach(key=>{const panel=grid.append('section').attr('class','metric-panel').attr('data-metric',key);panel.append('h3').text(v.spec.id==='f23'?`${key==='reactions'?'Reactions':'Comments'} per post`:['f08','f09'].includes(v.spec.id)?`Median ${key} ${key==='comments'?'on':'to'} posts`:key==='reactions'?'Reactions':key==='comments'?'Comments':escMetric[key]||key);v.chart=panel.append('div').attr('class','metric-plot');v.key=panel.append('div').attr('class','data-key');v.insight=panel.append('p').attr('class','data-insight');draw(key)});}finally{Object.assign(v,original)}
  v.insight.text('Both measures use the same selected records, with separate scales. Select a mark in either chart to inspect its source posts.');
 }
 function composition(v,rows,field){
