@@ -85,7 +85,8 @@ export function createFlagshipCharts({posts:P,asset,openRows}){
   const panels=[{title:'Median reactions vs other image posts',max:Math.max(200,Math.ceil(d3.max(groups,g=>g.index)/50)*50),ref:100,refLabel:'Image-post median',rows:g=>g.rxRows,value:g=>g.index,show:v=>d3.format('.1f')(v/100)+'×',ticks:[0,100,200],tick:v=>v/100+'×'},{title:'Posts above the image-post comment median',max:1,ref:ref.above,refLabel:'Image posts: '+pct(ref.above),rows:g=>g.cmRows,value:g=>g.above,show:pct,ticks:[0,.5,1],tick:pct}];
   panels.forEach((panel,j)=>{
    const x0=small?labelW:labelW+j*(panelW+gap),y0=small?first+j*(block+96):first,x=d3.scaleLinear([0,panel.max],[x0,x0+panelW]),rowY=i=>y0+i*rowH+rowH/2;
-   sized(text(s,small?0:x0,y0-34,panel.title,'flagship-series'),12);
+   const titleLines=!small&&panelW<290?(j===0?['Median reactions','vs other image posts']:['Posts above the','image-post comment median']):[panel.title];
+   titleLines.forEach((line,i)=>sized(text(s,small?0:x0,y0-34-(titleLines.length-1-i)*14,line,'flagship-series'),12));
    s.append('g').attr('class','chart-axis').attr('transform',`translate(0,${y0+block+2})`).call(d3.axisBottom(x).tickValues(panel.ticks).tickFormat(panel.tick).tickSize(0).tickPadding(8));
    groups.forEach((g,i)=>{const yy=rowY(i),color=FORMAT_COLORS[g.name]||SDG.navy,faded=!FORMAT_COLORS[g.name],v=panel.value(g);
     if(j===0||small){sized(text(s,0,yy+(small?0:-1),g.name,'flagship-series','start',faded?null:color),small?11.5:13);sized(text(s,0,yy+14,(j===0?g.rxRows:g.cmRows).length+' posts','flagship-small'),10);}
@@ -128,5 +129,9 @@ export function createFlagshipCharts({posts:P,asset,openRows}){
   const notes=['Videos identified from saved previews · March–June 2026'];
   notes.forEach((t,i)=>sized(text(s,0,h-9+i*13,t,'flagship-small'),small?9:10));
  }
- return {draws:[drawOverview,drawNetwork,drawFormats,drawCamera],hideTip};
+ // Hidden comparison panels are drawn on first use, then only when resized.
+ const draws=[['#overview-chart',drawOverview],['#network-chart',drawNetwork],['#formats-chart',drawFormats],['#camera-chart',drawCamera]].map(([id,draw])=>{
+  let lastSize='';return ()=>{const host=$(id);if(!host||host.closest('[hidden]'))return;const size=host.clientWidth+':'+host.clientHeight;if(size===lastSize)return;draw();lastSize=size};
+ });
+ return {draws,hideTip};
 }

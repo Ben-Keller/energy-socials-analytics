@@ -1,3 +1,4 @@
+import {setImageAttributes} from './responsive-images.js';
 import {captionRows,tagRows} from './report-math.js';
 import {createFlagshipCharts} from './flagship-charts.js';
 import {createAnalysis} from './analysis.js';
@@ -10,7 +11,7 @@ const date=p=>new Date(p.date+'T00:00:00Z').toLocaleDateString('en-GB',{day:'num
 const asset=src=>!src?'':D.media?.[src]||(/^(data:|https?:)/.test(src)?src:base+src);
 function el(tag,text,cls){const node=document.createElement(tag);if(text!=null)node.textContent=text;if(cls)node.className=cls;return node}
 function title(p){return (p.caption?.split(/\r?\n/).find(Boolean)||p.title||'Original post').slice(0,180)}
-function imageFor(p,large=false){const src=large?(p.image||p.thumbnail):p.thumbnail;if(!src)return null;const im=el('img');im.src=asset(src);im.alt='Visual accompanying the post';im.loading='lazy';return im}
+function imageFor(p,large=false){const src=large?(p.image||p.thumbnail):p.thumbnail;if(!src)return null;const im=el('img');if(D.media)im.src=asset(src);else setImageAttributes(im,p,base,{height:280,mobileHeight:220,cap:large?1280:320});im.alt='Visual accompanying the post';im.decoding='async';return im}
 function hideTip(){$('#chart-tooltip').hidden=true}
 // A single accessible post browser serves every chart and preserves its selected cohort.
 const dialog=$('#records-dialog');let recordRows=[],filteredRows=[],selectedId=null;
@@ -25,9 +26,11 @@ document.querySelectorAll('[data-pair]').forEach(b=>b.onclick=()=>openRows(tagRo
 
 const nativeData={posts:P,colors:TOPIC_COLORS,originalAnalysis:explorerMeta,originalRecords:P.map(p=>({activity_id:p.id,caption_eligible:p.words>0,ranking_eligible:Number.isFinite(p.reactions)&&Number.isFinite(p.comments)}))};
 const setupEmbedded=createAnalysis(nativeData,p=>openRows([byId.get(p.id)],'Selected original post',p.id),p=>Promise.resolve(byId.get(p.id)),{openRows});
-document.querySelectorAll('.embedded-analysis').forEach(setupEmbedded);
+const mountedCharts=new WeakSet();
+function mountVisibleCharts(){document.querySelectorAll('.embedded-analysis').forEach(host=>{if(!host.closest('[hidden]')&&!mountedCharts.has(host)){setupEmbedded(host);mountedCharts.add(host)}})}
+mountVisibleCharts();
 const responseTabs=[...document.querySelectorAll('[data-response-view]')];
-function selectResponse(button){responseTabs.forEach(tab=>{tab.setAttribute('aria-selected',tab===button);tab.tabIndex=tab===button?0:-1});document.querySelectorAll('[data-response-panel]').forEach(panel=>panel.hidden=panel.dataset.responsePanel!==button.dataset.responseView);const title=$('#approach-title');if(title&&button.dataset.title)title.textContent=button.dataset.title}
+function selectResponse(button){responseTabs.forEach(tab=>{tab.setAttribute('aria-selected',tab===button);tab.tabIndex=tab===button?0:-1});document.querySelectorAll('[data-response-panel]').forEach(panel=>panel.hidden=panel.dataset.responsePanel!==button.dataset.responseView);const title=$('#approach-title');if(title&&button.dataset.title)title.textContent=button.dataset.title;mountVisibleCharts()}
 responseTabs.forEach(button=>button.addEventListener('click',()=>selectResponse(button)));
 selectResponse(responseTabs[0]);
 $('.response-switch').addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;event.preventDefault();const next=event.key==='Home'?responseTabs[0]:event.key==='End'?responseTabs.at(-1):responseTabs.find(tab=>tab.getAttribute('aria-selected')!=='true');selectResponse(next);next.focus()});
@@ -35,11 +38,11 @@ const reportFrame=$('#report-explorer');let atlasObserver;
 function sizeReportAtlas(){const atlas=reportFrame.contentDocument?.querySelector('#atlas');if(!atlas)return;atlasObserver?.disconnect();atlasObserver=new ResizeObserver(()=>{const box=atlas.getBoundingClientRect();if(box.width>0)reportFrame.style.height=Math.ceil(box.height)+2+'px'});atlasObserver.observe(atlas)}
 reportFrame.addEventListener('load',sizeReportAtlas);if(reportFrame.contentDocument?.readyState==='complete')sizeReportAtlas();
 const evidenceTabs=[...document.querySelectorAll('[data-evidence-view]')];
-function selectEvidence(button){evidenceTabs.forEach(tab=>{tab.setAttribute('aria-selected',tab===button);tab.tabIndex=tab===button?0:-1});document.querySelectorAll('[data-evidence-panel]').forEach(panel=>panel.hidden=panel.dataset.evidencePanel!==button.dataset.evidenceView);requestAnimationFrame(()=>draws.forEach(draw=>draw()))}
+function selectEvidence(button){evidenceTabs.forEach(tab=>{tab.setAttribute('aria-selected',tab===button);tab.tabIndex=tab===button?0:-1});document.querySelectorAll('[data-evidence-panel]').forEach(panel=>panel.hidden=panel.dataset.evidencePanel!==button.dataset.evidenceView);mountVisibleCharts();requestAnimationFrame(()=>draws.forEach(draw=>draw()))}
 evidenceTabs.forEach(button=>button.addEventListener('click',()=>selectEvidence(button)));
 $('.evidence-switch').addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;event.preventDefault();const current=evidenceTabs.indexOf(document.activeElement),index=event.key==='Home'?0:event.key==='End'?evidenceTabs.length-1:(current+(event.key==='ArrowRight'?1:-1)+evidenceTabs.length)%evidenceTabs.length;selectEvidence(evidenceTabs[index]);evidenceTabs[index].focus()});
 const {draws}=createFlagshipCharts({posts:P,asset,openRows});draws.forEach(f=>f());let resizeFrame;let lastWidth=innerWidth;new ResizeObserver(()=>{if(Math.abs(innerWidth-lastWidth)<2)return;lastWidth=innerWidth;cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>draws.forEach(f=>f()))}).observe(document.body);
-const chapters=[...document.querySelectorAll('#overview,.chapter')],links=[...document.querySelectorAll('.reading-nav a')];let scrollFrame;function scrollProgress(){let current=chapters[0];for(const c of chapters)if(c.getBoundingClientRect().top<=170)current=c;links.forEach(a=>{if(a.hash==='#'+current.id)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')})}addEventListener('scroll',()=>{hideTip();cancelAnimationFrame(scrollFrame);scrollFrame=requestAnimationFrame(scrollProgress)},{passive:true});scrollProgress();
+addEventListener('scroll',hideTip,{passive:true});
 if(location.protocol==='file:'||document.documentElement.classList.contains('standalone'))document.documentElement.classList.add('standalone');
 
 

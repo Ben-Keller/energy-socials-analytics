@@ -16,6 +16,16 @@ for p in posts:
   assert (site/p['tile']['src']).is_file()
 assert len({p['image'] for p in posts if p.get('image')})==1298
 assert len(packs['packs'])==41 and max(p['bytes'] for p in packs['packs'])<65000
+assert (site/'atlas-overview.webp').is_file()
+for src in {p['tile']['src'] for p in posts if p.get('tile')}:
+ for size in [48,64]:assert (site/src.replace('.webp',f'-{size}.webp')).is_file()
+image_meta=json.loads((web/'src/generated/image-meta.json').read_text())
+assert len(image_meta)==1377
+for stem,meta in image_meta.items():
+ for size,width,height in meta['variants']:
+  assert (site/f'thumbnails/{stem}-{size}.webp').is_file()
+  assert max(width,height)<=size
+  assert width<=meta['width'] and height<=meta['height']
 assert len(gzip.compress((site/'index.html').read_bytes()))<650000
 assert len(json.loads((web/'src/catalog.json').read_text()))==16
 for file in ['Shares.csv','Instant_Reposts.csv','Riad_Meddeb_Rebuilt_Dataset.xlsx','Image_Manifest.csv','Annual_Coverage.csv']:assert (site/file).is_file()
@@ -36,4 +46,5 @@ for font in ['newsreader.woff2','newsreader-italic.woff2','instrument-sans.woff2
 standalone=(site/'Riad_Meddeb_Interactive_Report.html').read_text()
 assert 'class="standalone"' in standalone
 assert not re.search(r'<script[^>]+src=|<link rel="stylesheet"',standalone)
+assert not re.search(r'<img[^>]+srcset=',standalone)
 print('Verified the six-recommendation report, both new charts, full explorer, images, fonts and standalone download.')

@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 const web=fileURLToPath(new URL('../',import.meta.url)),pub=path.join(web,'public');
 let html=fs.readFileSync(path.join(web,'dist/index.html'),'utf8');
+html=html.replace(/<link rel="preload"[^>]*>/g,'');
 const data=JSON.parse(fs.readFileSync(path.join(web,'src/report-data.json'),'utf8'));
 const media={},sourceMap=new Map();
 const embed=rel=>{if(!rel)return '';const ext=path.extname(rel).slice(1),mime={jpg:'jpeg',jpeg:'jpeg',png:'png',webp:'webp'}[ext];if(!mime)throw Error('Unknown image '+rel);return 'data:image/'+mime+';base64,'+fs.readFileSync(path.join(pub,rel)).toString('base64')};
@@ -11,6 +12,7 @@ for(const p of data.posts){if(p.thumbnail){const original=p.image;media[p.thumbn
 data.media=media;data.base='';
 const json=JSON.stringify(data).replaceAll('<','\\u003c');
 html=html.replace(/<script id="report-data"[^>]*>[\s\S]*?<\/script>/,()=>'<script id="report-data" type="application/json">'+json+'</script>');
+html=html.replace(/(<img\b[^>]*?)\s(?:srcset|sizes)="[^"]*"/g,'$1').replace(/(<img\b[^>]*?)\s(?:srcset|sizes)="[^"]*"/g,'$1');
 html=html.replace(/<img\b([^>]*?)src="([^"]+)"([^>]*?)>/g,(_,a,src,b)=>'<img'+a+'src="'+embed(sourceMap.get(src)||src.replace('/energy-socials-analytics/',''))+'"'+b+'>');
 html=html.replace(/<link rel="stylesheet" href="([^"]+)"[^>]*>/g,(_,href)=>'<style>'+fs.readFileSync(path.join(web,'dist',href.replace('/energy-socials-analytics/','')),'utf8').replace(/url\([\"']?\/energy-socials-analytics\/fonts\/([^\"')]+)[\"']?\)/g,(_,name)=>'url(data:font/woff2;base64,'+fs.readFileSync(path.join(pub,'fonts',name)).toString('base64')+')')+'</style>');
 html=html.replace('</head>',()=>'<\!-- Embedded font licences: '+['newsreader-OFL.txt','instrumentsans-OFL.txt'].map(name=>fs.readFileSync(path.join(pub,'fonts',name),'utf8')).join('\n')+' --></head>');

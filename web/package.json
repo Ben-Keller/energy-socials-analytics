@@ -6,11 +6,14 @@
     "dev": "astro dev --host 127.0.0.1 --port 4321",
     "build": "astro build && node scripts/package-report.mjs",
     "verify": "node scripts/verify-report.mjs",
-    "preview": "astro preview --host 127.0.0.1 --port 4321"
+    "preview": "astro preview --host 127.0.0.1 --port 4321",
+    "prebuild": "node scripts/prepare-images.mjs",
+    "predev": "node scripts/prepare-images.mjs"
   },
   "dependencies": {
     "astro": "7.3.5",
     "d3": "7.9.0",
-    "esbuild": "0.25.12"
+    "esbuild": "0.25.12",
+    "sharp": "0.35.5"
   }
 }

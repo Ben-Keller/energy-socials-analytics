@@ -52,3 +52,8 @@
 #formats-chart{height:456px}#camera-chart{height:480px}@media(max-width:740px){#formats-chart{height:710px}#camera-chart{height:450px}}
 
 .chart-source{font:400 10px/1.5 var(--sans);color:var(--muted);letter-spacing:.1px;margin:8px 0 0}.network-layout+.chart-source{margin-top:10px}
+
+/* Match the title's fallback width and metrics to avoid a second mobile line
+   appearing only while Newsreader is loading. */
+@font-face{font-family:'Newsreader Heading Fallback';src:local('Georgia');size-adjust:96.09%;ascent-override:76.49%;descent-override:27.58%;line-gap-override:0%}
+.report-hero h1{font-family:Newsreader,'Newsreader Heading Fallback',Georgia,serif}

@@ -9,3 +9,11 @@ web/.astro/
 
 # Built downloads are generated from the report source.
 web/public/Riad_Meddeb_Interactive_Report.html
+
+# Reproducible responsive image metadata and large previews.
+web/src/generated/
+web/public/thumbnails/*-1280.webp
+
+web/public/atlas-overview.webp
+web/public/**/*-48.webp
+web/public/**/*-64.webp
