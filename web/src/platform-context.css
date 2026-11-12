@@ -1,18 +1,19 @@
 .algorithm-context{margin:48px 0 36px;padding:36px 0 30px;border-block:1px solid var(--line)}
 .algorithm-context h2{font:400 clamp(34px,3.5vw,46px)/1.08 var(--serif);letter-spacing:-.7px;margin:0 0 20px;max-width:850px}
 .algorithm-context .algorithm-lead{font:18px/1.6 var(--serif);max-width:880px;margin:0 0 32px;color:var(--ink)}
-.algorithm-body{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:60px}
-.algorithm-signals{display:grid;gap:22px;align-content:start}
-.algorithm-signals h3{font:400 23px/1.2 var(--serif);margin:0 0 7px}
-.algorithm-signals p{font:13px/1.7 var(--sans);color:var(--muted);margin:0;max-width:560px}
-.algorithm-results{border-left:1px solid var(--line);padding-left:36px}
-.algorithm-results>h3{font:500 12px/1.5 var(--sans);margin:0 0 19px}
-.algorithm-stat{display:grid;grid-template-columns:148px 1fr;gap:17px;align-items:center;margin-bottom:22px}
-.algorithm-stat strong{font:400 48px/1 var(--serif);letter-spacing:-1.2px;color:#00689d;white-space:nowrap}
-.algorithm-stat strong span{font-size:30px}
-.algorithm-stat p{font:12px/1.6 var(--sans);margin:0;color:var(--ink)}
-@media(max-width:1050px){.algorithm-body{gap:30px;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}.algorithm-results{padding-left:24px}.algorithm-stat{grid-template-columns:1fr;gap:7px}.algorithm-stat strong{font-size:45px}}
-@media(max-width:740px){.algorithm-context{margin:34px 0 28px;padding:26px 0}.algorithm-context h2{font-size:34px}.algorithm-context .algorithm-lead{font-size:18px;margin-bottom:24px}.algorithm-body{grid-template-columns:1fr;gap:26px}.algorithm-signals{gap:20px}.algorithm-signals h3{font-size:23px}.algorithm-signals p{font-size:12px}.algorithm-results{border-left:0;border-top:1px solid var(--line);padding:22px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:0 24px}.algorithm-results>h3,.algorithm-results>.platform-reference{grid-column:1/-1}.algorithm-stat{align-content:start;margin-bottom:0}.algorithm-stat strong{font-size:44px}.algorithm-stat p{font-size:11px}}
+.algorithm-findings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:32px}
+.algorithm-findings>article{display:grid;grid-template-rows:subgrid;grid-row:span 4;row-gap:17px;min-width:0}
+.algorithm-findings>article+article{border-left:1px solid var(--line);padding-left:32px}
+.algorithm-findings h3{font:400 24px/1.18 var(--serif);margin:0;max-width:350px}
+.algorithm-stat{margin:0}
+.algorithm-stat strong{display:block;font:400 52px/1 var(--serif);letter-spacing:-1.2px;color:#00689d;white-space:nowrap;margin-bottom:8px}
+.algorithm-stat strong span{font-size:32px}
+.algorithm-stat p{font:500 12px/1.5 var(--sans);margin:0;color:var(--ink);max-width:280px}
+.algorithm-detail{font:13px/1.7 var(--sans);color:var(--muted);margin:0}
+.algorithm-findings .platform-reference{margin:0;align-self:end}
+.algorithm-context .algorithm-research{margin-top:27px}
+@media(max-width:1050px){.algorithm-findings{column-gap:22px}.algorithm-findings>article+article{padding-left:22px}.algorithm-findings h3{font-size:22px}.algorithm-detail{font-size:12px}.algorithm-stat strong{font-size:48px}}
+@media(max-width:740px){.algorithm-context{margin:34px 0 28px;padding:26px 0}.algorithm-context h2{font-size:34px}.algorithm-context .algorithm-lead{font-size:18px;margin-bottom:26px}.algorithm-findings{grid-template-columns:1fr;gap:24px}.algorithm-findings>article{display:block;grid-row:auto}.algorithm-findings>article+article{border-left:0;border-top:1px solid var(--line);padding:24px 0 0}.algorithm-findings h3{font-size:24px;margin-bottom:16px}.algorithm-stat{display:grid;grid-template-columns:130px 1fr;gap:14px;align-items:center;margin-bottom:13px}.algorithm-stat strong{font-size:44px;margin:0}.algorithm-stat strong span{font-size:28px}.algorithm-stat p{font-size:11px}.algorithm-detail{font-size:12px}.algorithm-findings .platform-reference{margin-top:12px}}
 .platform-reference{font:400 10px/1.7 var(--sans);color:var(--muted);margin:16px 0 0}.platform-reference a{text-decoration-thickness:.5px;text-underline-offset:3px}
 .campaign-actions{background:#fff}.campaign-intro{font:18px/1.55 var(--serif);max-width:810px;margin:0 0 32px}
 .content-actions{display:grid;grid-template-columns:1fr 1fr;gap:34px 52px}
