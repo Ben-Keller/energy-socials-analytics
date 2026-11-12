@@ -1,0 +1,34 @@
+---
+import archive from '../site-data.json';
+import {imageAttributes} from '../responsive-images.js';
+const {base}=Astro.props;
+const columns=[
+ {offset:465,mobile:100,posts:[3267,3457,5409,5393,5172,4939]},
+ {offset:260,mobile:35,posts:[3305,4128,3363,3279,3072,5348]},
+ {offset:80,mobile:0,posts:[3165,5171,5359,4235,3633,5380]},
+ {offset:0,mobile:65,posts:[4120,3503,4820,4093,3281,5400]},
+ {offset:145,mobile:15,posts:[3404,5351,5186,4231,3930,4279]}
+];
+const byIndex=new Map(archive.posts.map(post=>[post.index,post]));
+---
+<section class="archive-cover" id="top" aria-labelledby="report-title">
+<div class="archive-cover-scene" aria-hidden="true">
+<div class="cover-field">
+<div><img src={base+'atlas-overview.webp'} width="768" height="984" alt="" decoding="async" fetchpriority="high"/></div>
+<div><img src={base+'atlas-overview.webp'} width="768" height="984" alt="" decoding="async"/></div>
+</div>
+<div class="cover-weave">
+{columns.map((column,i)=><div class="cover-strip" style={`--offset:${column.offset}px;--mobile-offset:${column.mobile}px;--delay:${i*.12}s`}>
+{column.posts.map((index,j)=>{
+ const post=byIndex.get(index);
+ return <div class="cover-tile" data-cover-post={index}><img {...imageAttributes(post,base,{height:230,mobileHeight:210,width:'180px',mobileWidth:'160px',cap:320})} alt="" loading={j<3?'eager':'lazy'} decoding="async"/></div>;
+})}
+</div>)}
+</div>
+<div class="cover-shade"></div>
+</div>
+<div class="archive-cover-inner">
+<h1 id="report-title"><span>Riad Meddeb</span>{' '}<span><em>Linkedin</em> analysis</span></h1>
+<p class="cover-intro">An archive spanning <strong>16 years</strong>, <strong>5,413 posts and reposts</strong>, and <strong>660 original posts since 2023</strong> on energy, finance, technology and development.</p>
+</div>
+</section>

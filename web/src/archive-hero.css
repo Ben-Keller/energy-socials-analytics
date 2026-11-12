@@ -1,0 +1,27 @@
+.archive-cover{position:relative;isolation:isolate;height:650px;overflow:hidden;background:#123b58;color:#fff}
+.archive-cover-scene{position:absolute;inset:0;max-width:1600px;margin:auto;overflow:hidden;pointer-events:none}
+.cover-field{position:absolute;left:270px;bottom:-100px;width:1350px;aspect-ratio:64/21;display:grid;grid-template-columns:1fr 1fr;transform:rotate(-12deg);opacity:.25;animation:cover-field-in 2.2s ease-out both}
+.cover-field>div{position:relative;overflow:hidden}
+.cover-field img{width:100%;max-width:none;height:auto}
+.cover-field>div+div img{transform:translateY(-51.219512%)}
+.cover-weave{position:absolute;width:855px;right:-38px;top:-110px;display:grid;grid-template-columns:145px 178px 154px 180px 150px;gap:12px;transform:rotate(-12deg);transform-origin:center 475px}
+.cover-strip{display:flex;flex-direction:column;gap:12px;transform:translateY(var(--offset));animation:cover-strip-in 1.8s cubic-bezier(.22,.61,.36,1) var(--delay) both}
+.cover-tile{flex:0 0 auto;overflow:hidden;background:#174461;outline:1px solid #ffffff24;outline-offset:-1px}
+.cover-tile img{width:100%;height:auto;max-width:none}
+.cover-shade{position:absolute;inset:0;background:linear-gradient(90deg,#123b58 0%,#123b58 24%,#123b58ed 35%,#123b58a8 45%,#123b5800 66%)}
+.archive-cover-inner{position:relative;z-index:1;max-width:1156px;height:100%;margin:auto;padding:110px 48px 92px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
+.archive-cover h1{font:400 clamp(70px,7vw,101px)/.97 Newsreader,'Newsreader Heading Fallback',Georgia,serif;letter-spacing:-2.8px;margin:0;max-width:690px;animation:cover-title-in 1.3s ease-out both}
+.archive-cover h1>span{display:block;white-space:nowrap}
+.archive-cover h1>span+span{font-size:.79em;margin-top:12px}
+.archive-cover h1 em{font-weight:400;color:#f6c84e}
+.cover-intro{font:400 18px/1.65 var(--serif);color:#e0eaf0;max-width:405px;margin:36px 0 0;animation:cover-title-in 1.5s ease-out .15s both}
+.cover-intro strong{color:#fff;font-weight:500}
+.archive-cover+.report-hero{padding-top:0}
+.archive-cover+.report-hero .algorithm-context{margin-top:0;border-top:0;padding-top:46px}
+@keyframes cover-strip-in{from{opacity:0;transform:translateY(calc(var(--offset) + 35px))}to{opacity:1;transform:translateY(var(--offset))}}
+@keyframes cover-title-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes cover-field-in{from{opacity:0}to{opacity:.25}}
+@media(max-width:1050px){.archive-cover{height:610px}.archive-cover-inner{padding:70px 40px}.archive-cover h1{font-size:78px;letter-spacing:-2px}.cover-intro{max-width:350px;font-size:17px}.cover-weave{right:-235px}.cover-field{left:160px}.cover-shade{background:linear-gradient(90deg,#123b58 0%,#123b58 22%,#123b58e8 35%,#123b5866 59%,transparent 78%)}}
+@media(max-width:740px){.archive-cover{height:680px}.archive-cover-inner{justify-content:flex-start;padding:49px 24px}.archive-cover h1{font-size:clamp(45px,12.9vw,68px);letter-spacing:-1.7px;max-width:100%}.archive-cover h1>span+span{font-size:.87em;margin-top:7px}.cover-intro{font-size:16px;line-height:1.5;max-width:320px;margin-top:24px}.cover-weave{width:762px;grid-template-columns:138px 150px 140px 148px 138px;gap:12px;right:auto;left:calc(50% - 400px);top:290px;transform:rotate(-12deg);transform-origin:center 250px}.cover-strip{--offset:var(--mobile-offset)!important}.cover-field{left:-140px;bottom:-18px;width:1000px;opacity:.2}.cover-shade{background:linear-gradient(180deg,#123b58 0%,#123b58 32%,#123b58d9 40%,transparent 62%)}.archive-cover+.report-hero .algorithm-context{padding-top:32px}}
+@media(prefers-reduced-motion:reduce){.cover-strip,.cover-field,.archive-cover h1,.cover-intro{animation:none}}
+@media print{.archive-cover{height:390px;print-color-adjust:exact;-webkit-print-color-adjust:exact;break-inside:avoid}.archive-cover-inner{padding:45px 30px}.archive-cover h1{font-size:64px}.cover-weave{right:-170px;top:-150px;transform:rotate(-12deg) scale(.85)}.cover-intro{font-size:16px}.cover-field{opacity:.25}}

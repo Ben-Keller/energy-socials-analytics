@@ -5,9 +5,11 @@ import PostExample from '../components/PostExample.astro';
 import RecommendationIntro from '../components/RecommendationIntro.astro';
 import AlgorithmContext from '../components/AlgorithmContext.astro';
 import CampaignActions from '../components/CampaignActions.astro';
+import ArchiveHero from '../components/ArchiveHero.astro';
 import '../report.css';
 import '../report-explorers.css';
 import '../platform-context.css';
+import '../archive-hero.css';
 const base=import.meta.env.BASE_URL.replace(/\/$/,'')+'/';
 const accessVisual=report.posts.find(p=>p.index===3267);
 const jobs=report.posts.find(p=>p.date==='2026-04-21'&&p.reactions===193);
@@ -27,7 +29,8 @@ const caseFor=key=>cases.find(c=>c.key===key);
 <header class="masthead"><a class="wordmark" href={base} aria-label="Riad Meddeb Linkedin analysis — back to beginning"><span class="report-brand" aria-hidden="true">in</span></a><nav class="view-switch" role="tablist" aria-label="Report views"><button id="report-tab" role="tab" aria-controls="report-panel" aria-selected="true" data-view="report">Report</button><button id="explore-tab" role="tab" aria-controls="explorer-panel" aria-selected="false" data-view="explore" data-online>Explore all data</button></nav></header>
 <main id="report-panel" role="tabpanel" aria-labelledby="report-tab">
 
-<section class="report-hero" id="top"><h1>Riad Meddeb Linkedin analysis</h1><AlgorithmContext base={base} /><p class="archive-intro">Riad’s LinkedIn archive spans <strong>16 years</strong> and brings together <strong>5,413 posts and reposts</strong>. Since 2023 alone, it includes <strong>660 original posts</strong>: a substantial body of analysis on energy, finance, technology and development.</p></section>
+<ArchiveHero base={base}/>
+<section class="report-hero"><AlgorithmContext base={base}/></section>
 <section class="primary-explorer" id="report-atlas" data-online aria-label="Interactive post archive"><iframe id="report-explorer" title="Interactive post archive with response map and post previews" src={base+'explore/?embedded=1&report=1'}></iframe></section>
 <div class="report-body">
 
