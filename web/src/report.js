@@ -52,11 +52,13 @@ addEventListener('scroll',hideTip,{passive:true});
 if(location.protocol==='file:'||document.documentElement.classList.contains('standalone'))document.documentElement.classList.add('standalone');
 
 
-let reportScroll=0;
-function setView(view,target='atlas',updateHash=true){const explore=view==='explore'&&!document.documentElement.classList.contains('standalone');if(explore&&!document.body.classList.contains('exploring'))reportScroll=scrollY;$('#report-panel').hidden=explore;$('#explorer-panel').hidden=!explore;document.body.classList.toggle('exploring',explore);document.querySelectorAll('[data-view]').forEach(b=>{const active=b.dataset.view===(explore?'explore':'report');b.setAttribute('aria-selected',active);b.tabIndex=active?0:-1});if(explore){const frame=$('#full-explorer');if(!frame.hasAttribute('src'))frame.src=frame.dataset.src.replace('#atlas','#'+target);scrollTo(0,0)}else{requestAnimationFrame(()=>{draws.forEach(f=>f());scrollTo(0,reportScroll)})}if(updateHash)history.replaceState(null,'',explore?'#explore':'#top');}
-document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
-document.querySelectorAll('[data-open-explorer]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setView('explore')}));
-$('.view-switch').addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const view=e.key==='Home'?'report':e.key==='End'?'explore':document.body.classList.contains('exploring')?'report':'explore';setView(view);$(`[data-view="${view}"]`).focus()});
-$('.wordmark').addEventListener('click',e=>{e.preventDefault();reportScroll=0;setView('report')});
-function routeView(){const h=location.hash;if(h.startsWith('#explore'))setView('explore',h.split('/')[1]||'atlas',false);else if(h==='#atlas'||/^#f\d/.test(h))setView('explore',h.slice(1));else if(document.body.classList.contains('exploring'))setView('report','atlas',false)}
-addEventListener('hashchange',routeView);routeView();
+// Keep existing archive links useful within the single report.
+function routeLegacyHash(){
+ const match=location.hash.match(/^#(?:explore(?:\/(.*))?|atlas)$/);if(!match)return;
+ const requested=match[1];
+ const existing=requested&&document.getElementById(requested);
+ const fallback=(requested&&requested!=='atlas')||document.documentElement.classList.contains('standalone')?'topic-evidence':'report-atlas';
+ const target=existing||document.getElementById(fallback);
+ history.replaceState(null,'','#'+target.id);target.scrollIntoView({behavior:'instant'});
+}
+addEventListener('hashchange',routeLegacyHash);routeLegacyHash();

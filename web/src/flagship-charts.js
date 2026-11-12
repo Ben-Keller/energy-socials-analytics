@@ -95,7 +95,7 @@ export function createFlagshipCharts({posts:P,asset,openRows}){
  }
 
  // Same-quarter baselines reduce calendar effects without implying a causal format effect.
- const FORMAT_COLORS={'To-camera video':SDG.green,'Link preview':SDG.red};
+ const FORMAT_COLORS={'To-camera video':SDG.green,'Headline-figure card':SDG.blue,'Link preview':SDG.red};
  const formats=formatEvidence(P,evidence),camera=cameraEvidence(P,evidence);
  const sized=(t,px)=>t.style('font-size',px+'px');
  const halo=t=>t.classed('halo-label',true).attr('paint-order','stroke').attr('stroke','#fff').attr('stroke-width',4).attr('stroke-linejoin','round');
