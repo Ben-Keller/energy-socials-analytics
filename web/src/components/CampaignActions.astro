@@ -1,30 +1,57 @@
 ---
-import research from '../platform-research.json';
+import report from '../report-data.json';
+import evidence from '../report-evidence.json';
+import {cameraEvidence} from '../report-format-math.js';
+import {median} from '../report-math.js';
+import {imageAttributes} from '../responsive-images.js';
+import '../campaign-actions.css';
 const {base}=Astro.props;
+const photo=report.posts.find(post=>post.index===3305);
+const chart=report.posts.find(post=>post.index===3267);
+const camera=cameraEvidence(report.posts,evidence);
+const cameraGroups=[{label:'To-camera videos',rows:camera.camera},{label:'Other posts',rows:camera.others}].map(group=>({...group,value:median(group.rows.map(post=>post.reactions))}));
+const maximum=Math.max(...cameraGroups.map(group=>group.value));
 ---
 <section class="report-closing campaign-actions" id="conclusion" aria-labelledby="conclusion-title"><div class="closing-inner">
-<h2 id="conclusion-title">What to change next</h2>
-<p class="campaign-intro">Make resource mobilization the organizing objective: reach relevant donors and delivery partners, demonstrate what UNDP can help them do, and give that interest a clear next step.</p>
-<div class="content-actions">
-<article><h3>Increase direct explanations to camera</h3><p>Test four additional short videos, each explaining one decision or trade-off in Riad’s own words. Record them alongside field visits and technical discussions.</p><p class="action-evidence">Nine identified to-camera videos received 114 median reactions, against 48 for other posts in the same months. A small sample to test further.</p></article>
-<article><h3>Reduce invitation-led posts; increase event findings</h3><p>For each priority mission, publish the revealing exchange, finding or unresolved choice. Use an invitation when readers can participate; follow the event with something useful to people who were not there.</p><p class="action-evidence">Event reports: 74 median reactions and 4 comments. Invitations: 53 and 1, across the classified captions.</p></article>
-<article><h3>Separate the photograph, chart and implication</h3><p>Test a document post with four clear pages: a field photograph, one sourced comparison, what it means, and the relevant opportunity to work with UNDP. Replace crowded composite visuals with one purpose per page.</p><p class="action-evidence">The visual review identified 11 chart, map or table posts. Carousel performance needs a separate test.</p></article>
-<article><h3>Make the partner opportunity explicit</h3><p>Explain who could apply the method, use the tool or develop a project. Ask a specific professional question. Mention contributors when their experience is relevant, and develop useful replies into a focused follow-up.</p><p class="action-evidence">Only 13 of 243 classified captions were opportunity posts. LinkedIn’s <a href={research.sources.quality.url}>current guidance</a> favors substantive contributions and targets engagement bait.</p></article>
-</div>
-<section class="campaign-example" aria-labelledby="campaign-title">
-<h3 id="campaign-title">One mission, one question, different treatments</h3>
-<p>Before a priority mission, agree on the intended audience, the evidence to capture and the conversation to seek. For example, <strong>“Grids for development”</strong> could ask: <em>Which grid investments would allow local firms to connect, produce and grow?</em></p>
-<div class="channel-treatments">
-<article><h4>LinkedIn</h4><div><p>Develop Riad’s argument with a photograph from the work and one clear comparison. Ask utilities, investors or policymakers to assess the decision.</p><span>Outcome: informed professional discussion.</span></div></article>
-<article><h4>Instagram</h4><div><p>Use an original short vertical clip and clean field photographs. Keep one line or key figure on a visual, with subtitles on video and context in the caption. Test Reels with non-followers where available.</p><span>Outcome: discovery and relevant profile visits.</span></div></article>
-<article><h4>UNDP website</h4><div><p>Publish the evidence, methodology, country example and support available in a readable web page. Use a descriptive title, dated sources, related links and a clear contact route.</p><span>Outcome: search visibility and enquiries about the work.</span></div></article>
-<article><h4>Internal email &amp; briefings</h4><div><p>Send a short, tailored note to relevant country and regional teams. Invite a selected audience to a JET methodology session or digital-tool demonstration when it addresses a defined need. Agree on an application and the next discussion.</p><span>Outcome: introductions, technical requests and partner opportunities.</span></div></article>
-</div>
-<p class="platform-reference"><a href={research.sources.metaTrials.url}>Instagram testing</a> · <a href={research.sources.googleAI.url}>Search and AI discovery</a> · <a href={base+'research/#channels'}>Channel evidence</a></p>
-</section>
-<section class="partner-outcomes" aria-labelledby="outcomes-title">
-<h3 id="outcomes-title">Track the next conversation and what it leads to</h3>
-<div><article><h4>Relevant discussion</h4><p>Technical questions, evidence requests and peer referrals from the intended professional audience.</p></article><article><h4>Qualified follow-up</h4><p>Briefing requests, meetings and agreed next steps, with a responsible colleague and campaign reference.</p></article><article><h4>Partner opportunity</h4><p>Requests for technical support, concepts developed and donor discussions. Record confirmed funding separately.</p></article></div>
-<p class="platform-reference">Compare content at the same age, using reach where available. Review website and AI visibility with the web team through <a href={research.sources.googleMeasure.url}>Search Console</a> and <a href={research.sources.bingMeasure.url}>Bing Webmaster Tools</a>.</p>
-</section>
+<h2 id="conclusion-title">Six actions to take next</h2>
+<p class="campaign-intro">Start with the next priority mission, with resource mobilization as the objective.</p>
+<ol class="mission-actions" role="list">
+<li>
+<span class="action-number" aria-hidden="true">01</span>
+<div class="action-copy"><h3>Agree one campaign question before each priority mission.</h3><p class="action-outcome">Target: relevant donor and partner interest.</p><p>Name the partners to reach, the decision they face and the evidence the mission can provide. Use that question to plan the interviews, photographs and data to collect, and carry it through the posts and follow-up.</p></div>
+<figure class="action-visual mission-question"><figcaption>Example campaign question</figcaption><blockquote>Grids for development</blockquote><p>Which grid investments would allow local firms to connect, produce and grow?</p><div class="mission-audience"><span>For utilities, donors and country teams</span></div></figure>
+</li>
+<li>
+<span class="action-number" aria-hidden="true">02</span>
+<div class="action-copy"><h3>Replace crowded composites with one purpose per page.</h3><p class="action-outcome">Target: clearer understanding and more shares.</p><p>Test a document post that separates the field photograph, the data, the implication and the opportunity to work with UNDP. Give each chart one finding-led title. For Instagram, use the original photograph with one line or one key number.</p></div>
+<figure class="action-visual document-sequence"><figcaption>Proposed four-page document</figcaption><div class="document-pages">
+<div class="document-page"><div class="document-image"><img {...imageAttributes(photo,base,{width:'110px',mobileWidth:'110px',height:150,mobileHeight:150,cap:320})} alt="Field photograph from Riad’s post archive" loading="lazy" decoding="async"/></div><span>Photograph</span></div>
+<div class="document-page"><div class="document-image document-chart"><img {...imageAttributes(chart,base,{width:'110px',mobileWidth:'110px',height:150,mobileHeight:150,cap:320})} alt="Data visualization from Riad’s post archive" loading="lazy" decoding="async"/></div><span>Evidence</span></div>
+<div class="document-page"><div class="document-message">What does this change?</div><span>Implication</span></div>
+<div class="document-page"><div class="document-message">Where can UNDP help?</div><span>Opportunity</span></div>
+</div></figure>
+</li>
+<li>
+<span class="action-number" aria-hidden="true">03</span>
+<div class="action-copy"><h3>Record four short explanations directly to camera.</h3><p class="action-outcome">Target: more engagement and discovery.</p><p>Explain one decision or trade-off per clip, in Riad’s own words. Record alongside field visits and technical discussions; reuse the footage as short, subtitled Instagram Reels. The nine identified clips provide a promising small sample for a larger test.</p></div>
+<figure class="action-visual camera-comparison"><figcaption>Median reactions · March–June 2026</figcaption>
+{cameraGroups.map(group=><div class="action-bar-row"><div><span>{group.label} <small>({group.rows.length})</small></span><strong>{group.value}</strong></div><div class="action-bar-track"><span style={`width:${group.value/maximum*100}%`}></span></div></div>)}
+<p class="action-visual-note">Posts published in the same months</p></figure>
+</li>
+<li>
+<span class="action-number" aria-hidden="true">04</span>
+<div class="action-copy"><h3>Replace routine event invitations with findings people can discuss.</h3><p class="action-outcome">Target: substantive comments and peer referrals.</p><p>After each priority event, publish the consequential finding or disagreement and Riad’s assessment. Ask a question that a specific professional audience can answer. Invite relevant contributors to add evidence, and retain invitations when readers can actually participate.</p></div>
+<figure class="action-visual event-rewrite"><figcaption>Example change in emphasis</figcaption><p class="event-before">“We joined a panel on grid investment.”</p><span class="rewrite-arrow" aria-hidden="true">↓</span><blockquote>“Which grid investment would remove the biggest constraint for local firms?”</blockquote><p class="action-visual-note">Lead with the event’s evidence, then open the discussion.</p></figure>
+</li>
+<li>
+<span class="action-number" aria-hidden="true">05</span>
+<div class="action-copy"><h3>Publish the evidence and UNDP’s offer on one useful web page.</h3><p class="action-outcome">Target: search visibility and qualified enquiries.</p><p>For each priority campaign, create or update a UNDP page with the methodology or tool, a country example and a clear contact. Use a descriptive title and dated sources. Direct interested readers there from posts and tailored emails, with a specific reason to get in touch.</p></div>
+<figure class="action-visual campaign-page"><figcaption>Example campaign page</figcaption><div class="campaign-page-sheet"><span class="page-domain">undp.org</span><h4>Grid investment for productive use</h4><div class="page-contents"><span>Country evidence</span><span>Methodology and tools</span><span>Technical support available</span></div><p>Discuss a country application with UNDP <span aria-hidden="true">↗</span></p></div></figure>
+</li>
+<li>
+<span class="action-number" aria-hidden="true">06</span>
+<div class="action-copy"><h3>Turn relevant interest into a targeted technical briefing.</h3><p class="action-outcome">Target: partner requests and resource mobilization.</p><p>Select donors, country teams and delivery partners with a defined need. Follow up with a tailored note and a focused JET methodology session or digital-tool demonstration. Agree an application, a responsible colleague and the next discussion; track technical-support requests and donor conversations.</p></div>
+<figure class="action-visual partner-path"><figcaption>Example follow-up</figcaption><div><span>Country team</span><p>A defined transition-planning need</p></div><div><span>Technical session</span><p>JET methodology applied to that need</p></div><div><span>Agreed next step</span><p>A country application and named lead</p></div></figure>
+</li>
+</ol>
 </div></section>
