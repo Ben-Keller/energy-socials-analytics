@@ -1,5 +1,6 @@
 ---
 import research from '../platform-research.json';
+import AlgorithmVisual from './AlgorithmVisual.astro';
 const {base}=Astro.props;
 ---
 <section class="algorithm-context" aria-labelledby="algorithm-title">
@@ -8,7 +9,7 @@ const {base}=Astro.props;
 <div class="algorithm-findings">
 {research.algorithmFindings.map(finding=><article>
 <h3>{finding.title}</h3>
-<div class="algorithm-stat"><strong>{finding.value}<span>%</span></strong><p>{finding.metric}</p></div>
+<AlgorithmVisual finding={finding}/>
 <p class="algorithm-detail">{finding.detail}</p>
 <p class="platform-reference"><a href={research.sources[finding.source].url}>{finding.sourceLabel}</a></p>
 </article>)}

@@ -4,6 +4,8 @@ import {createFlagshipCharts} from './flagship-charts.js';
 import {createAnalysis} from './analysis.js';
 import explorerMeta from './report-explorer-meta.json';
 import {TOPIC_COLORS} from './report-palette.js';
+import {revealCharts} from './chart-reveals.js';
+document.querySelectorAll('[data-algorithm-reveal]').forEach(host=>revealCharts(host,host.dataset.algorithmReveal));
 const $=s=>document.querySelector(s),D=JSON.parse($('#report-data').textContent),P=D.posts,C=captionRows(P).filter(p=>p.classified),byId=new Map(P.map(p=>[p.id,p]));
 const base=D.base;
 const fmt=n=>n===null||n===undefined?'Unknown':Number.isInteger(n)?n.toLocaleString('en-GB'):n.toLocaleString('en-GB',{maximumFractionDigits:1});
