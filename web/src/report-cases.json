@@ -17,21 +17,21 @@
     "selectionReason": "An example of detailed analysis organized around one question: will green hydrogen create local value or deepen existing inequalities?"
   },
   {
-    "key": "cooking",
+    "key": "access-visual",
     "chapter": "stakes",
     "number": "02",
     "label": "One visual comparison",
-    "date": "2026-03-17",
-    "reactions": 140,
-    "insight": "The clean-cooking post makes a neglected issue economically consequential: trillions in annual losses against billions in investment. The mismatch is the argument.",
-    "change": "Put that comparison in the visual, with direct labels and sources. Use the caption to explain the policy choices instead of making readers find the key numbers.",
-    "excerpt": "Dirty cooking costs the global economy an estimated $2.4 to $4 trillion each year through health impacts, environmental damage, and lost productivity. Yet global investment in clean cooking remains around $2.5 billion annually, less than a third of what is needed.",
+    "date": "2023-07-03",
+    "reactions": 48,
+    "insight": "The graphic compares two policy scenarios for the same year, making the projected effect on poverty visible.",
+    "change": "Keep the comparison on one scale and use colour to highlight the difference between the scenarios.",
+    "excerpt": "Explore UNDP ´s  latest research at https://lnkd.in/ekiPqCy8 #EnergyForDevelopment #genderequality",
     "takeaways": [
-      "Use a comparison that changes the scale of the issue. Annual losses in trillions beside investment in billions make the financing gap immediately apparent.",
-      "Turn the numerical gap into a question of priorities. Readers can assess the investment decision as well as the size of the problem.",
-      "Make that comparison the basis of a dedicated visual. Label the annual estimates and their sources, then explain what additional investment could achieve."
+      "Compare policy choices within one visual. The same year, unit and repeated symbols let readers assess the difference between the scenarios directly.",
+      "Use colour to isolate the result. Six highlighted figures represent 60 million women, so readers can see the projected reduction without calculating it.",
+      "Keep the caption focused on the visual’s finding. It states the projected benefit and links to the research, making the post easy to understand and share."
     ],
-    "selectionReason": "An example of making an investment gap clear by comparing trillions in annual losses with billions in funding."
+    "selectionReason": "An example of a two-scenario graphic that makes the projected development benefit of electricity access visible."
   },
   {
     "key": "finance",

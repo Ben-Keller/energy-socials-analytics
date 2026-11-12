@@ -4,12 +4,20 @@ const {base}=Astro.props;
 const sources=research.sources;
 ---
 <section class="algorithm-context" aria-labelledby="algorithm-title">
-<h2 id="algorithm-title">Professional relevance shapes who sees a post</h2>
-<p>LinkedIn increasingly matches posts to readers’ professional interests, including beyond the author’s network. For Riad, the implication is to make the audience’s decision explicit, explain the evidence and invite informed discussion.</p>
-<ol class="algorithm-history">
-<li><a href={sources.li2020.url}>2020</a><span>Reading time joins explicit engagement signals.</span></li>
-<li><a href={sources.li2024.url}>2024</a><span>Attention is assessed against comparable content.</span></li>
-<li><a href={sources.profile.url}>2026</a><span>Topic, profile and activity guide discovery.</span></li>
-</ol>
-<p class="platform-reference"><a href={base+'research/'}>Platform research and implications</a> · reviewed {research.reviewed}</p>
+<h2 id="algorithm-title">First: what’s in the LinkedIn algorithm?</h2>
+<p class="algorithm-lead">LinkedIn matches posts to professional interests and past activity. Its newer models can connect relevant expertise with people outside the author’s network.</p>
+<div class="algorithm-body">
+<div class="algorithm-signals">
+<article><h3>Professional interests guide discovery</h3><p>Topic, industry, skills and geography inform recommendations. Name the decision and the professional audience it affects.</p></article>
+<article><h3>Reading time counts alongside reactions</h3><p>Reading is a signal even without a reaction. Attention is judged against comparable content, rather than rewarding length alone.</p></article>
+<article><h3>Substantive exchanges matter</h3><p>LinkedIn is reducing engagement bait and automated comments. Invite readers to add evidence, experience or a different view.</p></article>
+</div>
+<aside class="algorithm-results" aria-label="Results from LinkedIn’s Profile Relevance experiments">
+<h3>What LinkedIn’s relevance tests found</h3>
+<div class="algorithm-stat"><strong>+17.7<span>%</span></strong><p>More likes, comments and shares among members with limited activity history.</p></div>
+<div class="algorithm-stat"><strong>−18.8<span>%</span></strong><p>Lower hide rate in the overall experiment.</p></div>
+<p class="platform-reference"><a href={sources.profile.url}>LinkedIn Engineering, November 2026</a>. Relative changes in platform experiments; not forecasts for individual posts.</p>
+</aside>
+</div>
+<p class="platform-reference"><a href={sources.li2026.url}>Relevance</a> · <a href={sources.li2024.url}>Reading time</a> · <a href={sources.quality.url}>Conversation quality</a> · <a href={base+'research/'}>Full research and history</a></p>
 </section>

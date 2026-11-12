@@ -9,7 +9,7 @@ import '../report.css';
 import '../report-explorers.css';
 import '../platform-context.css';
 const base=import.meta.env.BASE_URL.replace(/\/$/,'')+'/';
-const cooking=report.posts.find(p=>p.date==='2026-03-17'&&p.reactions===140);
+const accessVisual=report.posts.find(p=>p.index===3267);
 const jobs=report.posts.find(p=>p.date==='2026-04-21'&&p.reactions===193);
 const personal=report.posts.find(p=>p.date==='2026-04-25'&&p.reactions===63);
 const hydrogen=report.posts.find(p=>p.date==='2026-01-19'&&p.reactions===200);
@@ -43,17 +43,11 @@ const caseFor=key=>cases.find(c=>c.key===key);
 <section class="chapter" data-tone="dark" id="stakes"><div class="chapter-inner"><div class="chapter-heading"><span class="chapter-number" aria-hidden="true">02</span><div><h2>{report.recommendations[1].title}</h2></div></div>
 <RecommendationIntro index={1} />
 
-<PostExample post={cooking} takeaways={caseFor("cooking").takeaways} excerpt={caseFor("cooking").excerpt} selectionReason={caseFor("cooking").selectionReason} />
+<PostExample post={accessVisual} takeaways={caseFor("access-visual").takeaways} excerpt={caseFor("access-visual").excerpt} selectionReason={caseFor("access-visual").selectionReason} />
 </div></section>
 <section class="chapter" data-tone="light" id="formats"><div class="chapter-inner"><div class="chapter-heading"><span class="chapter-number" aria-hidden="true">03</span><div><h2>{report.recommendations[2].title}</h2></div></div>
 <RecommendationIntro index={2} />
 
-<section class="exhibit flagship-exhibit approach-exhibit" id="comments-by-approach" aria-labelledby="approach-comments-title">
-<h3 id="approach-comments-title">Arguments and event reports receive four median comments overall; their relative performance varies by topic.</h3>
-<p class="overall-comparison">Overall median comments: <strong>4</strong> for 98 arguments · <strong>4</strong> for 79 event reports</p>
-<article class="embedded-analysis" id="f11" aria-label="Comments by topic and approach"><div class="figuretext" hidden></div></article>
-<p class="chart-source">243 classified captions · one topic and writing approach per post</p>
-</section>
 <section class="exhibit flagship-exhibit approach-exhibit" id="reactions-by-approach" aria-labelledby="approach-reactions-title">
 <h3 id="approach-reactions-title">Event reports lead on median reactions in five of seven topics; arguments lead in access and islands.</h3>
 <p class="overall-comparison">Overall median reactions: <strong>66</strong> for 98 arguments · <strong>74</strong> for 79 event reports</p>

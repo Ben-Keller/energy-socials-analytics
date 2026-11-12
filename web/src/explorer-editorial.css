@@ -10,3 +10,12 @@
 @media(max-width:740px){.atlas-tools{gap:10px}.atlas-tools .search{max-width:none;height:40px}.extra-filters summary{width:40px;height:40px}.extra-filter-panel{padding:18px 14px}.extra-filter-panel .filters{gap:18px}.extra-filter-panel .atlas-caption{display:block;font-size:10px}.extra-filter-panel .atlas-caption span{display:block;margin-top:10px}.extra-filter-panel .year-filter>div{flex-wrap:wrap}}
 
 .report-primary .post-icon:has(.no-image){display:none!important}
+
+/* Charts flow with the document instead of creating nested scroll areas. */
+.atlas-workspace{align-items:start}
+.atlas-workspace .atlas-window,.report-primary .atlas-window{height:auto;max-height:none;min-height:0;overflow:visible;overscroll-behavior:auto;contain:layout}
+.atlas-inspector,.report-primary .atlas-inspector{height:auto;max-height:none}
+.inspector-content{overflow:visible;overscroll-behavior:auto;max-height:none}
+.inspector-caption{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
+.text-index>div{max-height:none;overflow:visible}
+html.report-primary{overflow:clip}

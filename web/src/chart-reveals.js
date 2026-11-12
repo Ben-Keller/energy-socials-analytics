@@ -5,15 +5,18 @@ const motion = matchMedia('(prefers-reduced-motion: reduce)');
 const ease = 'cubic-bezier(.37,0,.22,1)';
 let flowMaskId = 0;
 const enabled = typeof IntersectionObserver !== 'undefined' && typeof Element.prototype.animate === 'function';
-const observer = enabled ? new IntersectionObserver(entries => {
+const onIntersect = entries => {
   for (const entry of entries) if (entry.isIntersecting) {
     const job = [...jobs].find(job => job.element === entry.target);
     if (job) play(job);
   }
-}, {threshold: .12, rootMargin: '0px 0px -36px 0px'}) : null;
+};
+const observer = enabled ? new IntersectionObserver(onIntersect, {threshold: .12, rootMargin: '0px 0px -36px 0px'}) : null;
+const atlasObserver = enabled ? new IntersectionObserver(onIntersect, {threshold: 0, rootMargin: '0px 0px -36px 0px'}) : null;
 
 function finish(job, seen = true) {
   observer?.unobserve(job.element);
+  atlasObserver?.unobserve(job.element);
   for (const animation of job.animations) animation.cancel();
   job.animations.length = 0;
   for (const cleanup of job.cleanups) cleanup();
@@ -61,7 +64,7 @@ export function revealCharts(host, kind) {
     element.dataset.revealType = job.type;
     element.addEventListener('pointerdown', job.interact, true);
     element.addEventListener('focusin', job.interact, true);
-    record.jobs.add(job); jobs.add(job); observer.observe(element);
+    record.jobs.add(job); jobs.add(job); (job.type==='atlas'?atlasObserver:observer).observe(element);
   });
 }
 
@@ -69,6 +72,7 @@ function play(job) {
   if (job.playing || !jobs.has(job)) return;
   if (motion.matches || !job.element.isConnected) { finish(job); return; }
   observer.unobserve(job.element);
+  atlasObserver.unobserve(job.element);
   job.playing = true; job.record.started = true;
   const root = job.element, type = job.type;
   root.style.opacity = job.opacity;
