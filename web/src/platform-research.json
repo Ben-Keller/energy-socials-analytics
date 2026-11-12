@@ -1,6 +1,9 @@
 {
   "reviewed": "12 November 2026",
   "sources": {
+    "metricoolFormats": {"title":"Metricool · 2026 LinkedIn Study, personal-profile formats","date":"April 2026; January–February sample","url":"https://metricool.com/wp-content/uploads/Linkedin-Study-2026-EN.pdf#page=28"},
+    "bufferFrequency": {"title":"Julian Winternheimer, Buffer · Posting-frequency analysis","date":"Reviewed 12 November 2026","url":"https://symphonious-shortbread-cd2770.netlify.app/posts/linkedin-posting-frequency/"},
+    "bufferTiming": {"title":"Buffer · Best time to post on LinkedIn, 4.8 million posts","date":"9 September 2026","url":"https://buffer.com/resources/best-time-to-post-on-linkedin/"},
     "li2019": {"title":"LinkedIn Engineering · Community-focused Feed optimization","date":"25 June 2019","url":"https://www.linkedin.com/blog/engineering/feed/community-focused-feed-optimization"},
     "li2020": {"title":"LinkedIn Engineering · Understanding dwell time","date":"12 May 2020","url":"https://www.linkedin.com/blog/engineering/feed/understanding-feed-dwell-time"},
     "li2023": {"title":"Interview with LinkedIn’s Dan Roth and Alice Xiong · Entrepreneur","date":"26 June 2023","url":"https://www.entrepreneur.com/science-technology/linkedin-changed-its-algorithms-heres-how-your-posts/454728"},
@@ -18,10 +21,140 @@
     "bingMeasure": {"title":"Microsoft Bing · Topics Portfolio in AI Performance","date":"13 October 2026","url":"https://blogs.bing.com/webmaster/2026/10/introducing-topics-portfolio-beta-in-ai-performance/"}
   },
   "algorithmFindings": [
-    {"title":"Matching posts to professional profiles increased engagement.","value":"+17.7","metric":"Likes, comments and shares among members with limited activity history","detail":"Posts were matched to professional profiles and geography. This recommendation source also required an initial like, comment or share from someone outside the author’s network.","source":"profile","sourceLabel":"LinkedIn Engineering · November 2026","visual":{"kind":"index","caption":"Engagement index · comparison system = 100"}},
-    {"title":"A ranking model built on past interactions increased engagement.","value":"+3.52","metric":"Likes, comments and reshares overall","detail":"Controlled tests against the previous model also recorded 2.10% more time spent.","source":"feedSR","sourceLabel":"LinkedIn research · September 2026","visual":{"kind":"segments","caption":"Change in likes, comments and reshares","segments":[{"label":"Daily","value":4.07},{"label":"Weekly","value":3.4},{"label":"Monthly","value":1.86},{"label":"New","value":null}]}},
-    {"title":"LinkedIn reports fewer views of content classified as “AI slop”.","value":"−40","metric":"Views of that content over a few weeks","detail":"Members used the new low-quality content reporting option over one million times in two weeks. The decline in views is a reported platform trend, rather than a controlled test.","source":"qualityResults","sourceLabel":"Hari Srinivasan · LinkedIn Chief Product Officer","visual":{"kind":"waffle","caption":"Views index · earlier period = 100"}}
-  ],
+  {
+    "title": "Carousels lead on impressions; single images lead on comments.",
+    "value": "2.4",
+    "suffix": "×",
+    "metric": "Carousel impressions relative to video",
+    "detail": "Test carousels for explanations that need several steps; keep one-chart posts for discussion. Retain Riad’s to-camera videos, whose results are assessed below.",
+    "source": "metricoolFormats",
+    "sourceLabel": "Metricool · personal profiles, Jan–Feb 2026",
+    "visual": {
+      "kind": "formats",
+      "caption": "Mean impressions and comments per post",
+      "rows": [
+        {
+          "label": "Carousel",
+          "impressions": 1451.19,
+          "comments": 2.38
+        },
+        {
+          "label": "Single image",
+          "impressions": 1186.74,
+          "comments": 2.8
+        },
+        {
+          "label": "Text",
+          "impressions": 1045.15,
+          "comments": 1.75
+        },
+        {
+          "label": "Poll",
+          "impressions": 717.71,
+          "comments": 0.65
+        },
+        {
+          "label": "Video",
+          "impressions": 605.57,
+          "comments": 0.98
+        },
+        {
+          "label": "Multi-image",
+          "impressions": 338.42,
+          "comments": 0.85
+        }
+      ]
+    }
+  },
+  {
+    "title": "A ranking model built on past interactions increased engagement.",
+    "value": "+3.52",
+    "metric": "Likes, comments and reshares overall",
+    "detail": "These groups describe how often members use LinkedIn. In controlled tests, the model also increased time spent by 2.10%.",
+    "source": "feedSR",
+    "sourceLabel": "LinkedIn research · September 2026",
+    "visual": {
+      "kind": "segments",
+      "caption": "Engagement change by reader activity",
+      "segments": [
+        {
+          "label": "Daily",
+          "value": 4.07
+        },
+        {
+          "label": "Weekly",
+          "value": 3.4
+        },
+        {
+          "label": "Monthly",
+          "value": 1.86
+        },
+        {
+          "label": "New",
+          "value": null
+        }
+      ]
+    }
+  },
+  {
+    "title": "More frequent posting was associated with higher engagement rates.",
+    "value": "3–4",
+    "suffix": "",
+    "metric": "Original posts per week to plan for Riad",
+    "detail": "Riad averaged 3.8 originals a week across 37 full weeks in 2026. Plan 3–4 consistently and test timing before increasing volume. The frequency study did not show higher reach per post.",
+    "source": "bufferFrequency",
+    "sourceLabel": "Buffer analysis · 94,485 accounts",
+    "localEvidence": "Riad: 142 originals · 5 Jan–20 Sep 2026",
+    "visual": {
+      "kind": "frequency",
+      "caption": "Engagement-rate lift vs. one-post weeks · percentage points",
+      "rows": [
+        {
+          "label": "1 post",
+          "value": 0
+        },
+        {
+          "label": "2–5 posts",
+          "value": 0.232717
+        },
+        {
+          "label": "6–10 posts",
+          "value": 0.758123
+        },
+        {
+          "label": "11+ posts",
+          "value": 1.404902
+        }
+      ]
+    }
+  }
+],
+  "publishingBenchmarks": [
+  {
+    "title": "Choose the format for the intended response",
+    "finding": "Metricool’s personal-profile table reports mean impressions of 1,451.19 for carousels, 1,186.74 for single images and 605.57 for video. Single images lead on mean comments: 2.80 versus 2.38 for carousels. These are observational format averages for January–February 2026; the wider study covers 673,658 posts from 63,108 accounts across two years. Zero-impression and zero-interaction posts are excluded, and outliers retained.",
+    "implication": "Test document carousels for multi-step explanations and single-chart posts for discussion. This benchmark does not establish a causal format advantage or supersede Riad’s own video results.",
+    "sources": [
+      "metricoolFormats"
+    ]
+  },
+  {
+    "title": "Use the existing volume more consistently",
+    "finding": "Buffer’s underlying analysis compares each account with itself using account fixed effects. Engagement-rate differences versus one-post weeks are +0.23, +0.76 and +1.40 percentage points for 2–5, 6–10 and 11+ posts. The sample excludes posts with five or fewer engagements and weeks with no posts; time-varying content and audience factors remain possible confounders. Its reach model estimates lower reach per post at higher frequencies, unlike the broader claim in Buffer’s marketing article.",
+    "implication": "Riad published 142 originals across 37 complete Monday–Sunday weeks from 5 January through 20 September 2026: 3.84 per week, a median of 3, with 3 empty weeks and a range of 0–12. A planning target of 3–4 originals per week is a proposed consistency test, not an estimated optimum.",
+    "sources": [
+      "bufferFrequency"
+    ]
+  },
+  {
+    "title": "Test afternoon slots in the priority audience’s time zone",
+    "finding": "Buffer’s September 2026 analysis of 4.8 million posts identifies Wednesday at 16:00 and Friday at 15:00 and 16:00 as its highest-engagement slots. The publication normalizes results to local time. These are aggregated benchmarks, not results for Riad’s international audience.",
+    "implication": "Try Wednesday 16:00 and Friday 15:00 in the priority audience’s local time against current slots, using comparable topics and formats and the same observation window. Choose the audience before converting times for scheduling.",
+    "sources": [
+      "bufferTiming"
+    ]
+  }
+],
   "history": [
     {"year":"2019","title":"Professional conversations and network relevance","finding":"LinkedIn described a two-stage system: retrieve candidate posts, then rank them for each viewer. Its objectives included viewing, conversation and feedback to creators. Network content dominated the system described at that time.","implication":"Relevant professional relationships were already central. The later changes add ways to recognize useful content; they do not make the network irrelevant.","sources":["li2019"]},
     {"year":"2020","title":"Reading becomes a signal, even without a reaction","finding":"LinkedIn introduced a model predicting whether a reader would skip a post after a short dwell. A higher predicted skip probability reduced the post’s ranking score. The company reported rolling the model out to all members.","implication":"Reaction counts miss readers who consume a post without responding. A useful opening matters, but this is not evidence for padding captions to increase reading time.","sources":["li2020"]},

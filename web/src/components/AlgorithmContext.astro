@@ -4,15 +4,21 @@ import AlgorithmVisual from './AlgorithmVisual.astro';
 const {base}=Astro.props;
 ---
 <section class="algorithm-context" aria-labelledby="algorithm-title">
-<h2 id="algorithm-title">First: what’s in the LinkedIn algorithm?</h2>
-<p class="algorithm-lead">Three measured results from LinkedIn’s 2026 ranking tests and product updates.</p>
+<h2 id="algorithm-title">First: what works on LinkedIn?</h2>
+<p class="algorithm-lead">Format benchmarks, reader activity and a posting schedule to test.</p>
 <div class="algorithm-findings">
 {research.algorithmFindings.map(finding=><article>
 <h3>{finding.title}</h3>
 <AlgorithmVisual finding={finding}/>
 <p class="algorithm-detail">{finding.detail}</p>
-<p class="platform-reference"><a href={research.sources[finding.source].url}>{finding.sourceLabel}</a></p>
+<p class="platform-reference"><a href={research.sources[finding.source].url}>{finding.sourceLabel}</a>{finding.localEvidence&&<><br/>{finding.localEvidence}</>}</p>
 </article>)}
+</div>
+<div class="posting-timing" aria-labelledby="posting-timing-title">
+<div><h3 id="posting-timing-title">Test Wednesday and Friday afternoons</h3><p>Two starting slots from Buffer’s 4.8-million-post benchmark, in the priority audience’s local time.</p><p class="platform-reference"><a href={research.sources.bufferTiming.url}>Buffer · September 2026</a></p></div>
+<ol class="posting-week" aria-label="Two posting slots to test against the current schedule">
+{[['Mon',''],['Tue',''],['Wed','16:00'],['Thu',''],['Fri','15:00']].map(([day,time])=><li class:list={{'posting-slot':Boolean(time)}}><span>{day}</span><strong>{time||'—'}</strong></li>)}
+</ol>
 </div>
 <p class="platform-reference algorithm-research"><a href={base+'research/'}>Full research and history</a></p>
 </section>

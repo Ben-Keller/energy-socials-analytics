@@ -1,27 +1,30 @@
 ---
 const {finding}=Astro.props;
 const id='algorithm-'+finding.source;
-const gain=Number(finding.value.replace('−','-'));
 const plot=finding.visual;
-const indexHeight=value=>value/125*120;
+const gain=Number(finding.value);
 const engagementX=value=>87+value/5*178;
+const formatX=value=>94+value/1600*110;
+const frequencyX=value=>87+value/1.5*178;
 ---
-<figure class="algorithm-visual" data-algorithm-reveal={plot.kind==='index'?'f07':plot.kind==='waffle'?'f10':'bars'}>
-<div class="algorithm-stat"><strong>{finding.value}<span>%</span></strong><p>{finding.metric}</p></div>
-{plot.kind==='index'&&<svg viewBox="0 0 320 182" role="group" aria-labelledby={id+'-title '+id+'-desc'}>
-<title id={id+'-title'}>Engagement increased by 17.7% in the limited-history member group.</title>
-<desc id={id+'-desc'}>Relative index: comparison system 100; Profile Relevance 117.7. Both columns start at zero.</desc>
-{[0,50,100].map(value=><g class="algorithm-axis"><line x1="36" y1={140-indexHeight(value)} x2="300" y2={140-indexHeight(value)}/><text x="26" y={144-indexHeight(value)} text-anchor="end">{value}</text></g>)}
-<rect class="algorithm-baseline" x="64" y={140-indexHeight(100)} width="68" height={indexHeight(100)} fill="#adc5d3"/>
-<rect class="algorithm-result" x="204" y={140-indexHeight(100+gain)} width="68" height={indexHeight(100+gain)} fill="#00689d"/>
-<text class="algorithm-value" x="98" y={131-indexHeight(100)} text-anchor="middle">100</text>
-<text class="algorithm-value" x="238" y={131-indexHeight(100+gain)} text-anchor="middle">{100+gain}</text>
-<text class="algorithm-label" x="98" y="160" text-anchor="middle">Comparison</text>
-<text class="algorithm-label" x="238" y="160" text-anchor="middle">Profile Relevance</text>
+<figure class="algorithm-visual" data-algorithm-reveal="bars">
+<div class="algorithm-stat"><strong>{finding.value}<span>{finding.suffix??'%'}</span></strong><p>{finding.metric}</p></div>
+{plot.kind==='formats'&&<svg viewBox="0 0 320 182" role="group" aria-labelledby={id+'-title '+id+'-desc'}>
+<title id={id+'-title'}>Carousels lead on impressions; single images lead on comments.</title>
+<desc id={id+'-desc'}>Personal-profile benchmark: mean impressions are 1,451 for carousels, 1,187 for single images, 1,045 for text, 718 for polls, 606 for video and 338 for multi-image posts. Comments are listed separately.</desc>
+<text class="algorithm-overall-label" x="146" y="13" text-anchor="middle">Impressions</text>
+<text class="algorithm-overall-label" x="306" y="13" text-anchor="end">Comments</text>
+{[0,800,1600].map(value=><g class="algorithm-axis"><line x1={formatX(value)} y1="22" x2={formatX(value)} y2="154"/><text x={formatX(value)} y="171" text-anchor="middle">{value.toLocaleString('en-GB')}</text></g>)}
+{plot.rows.map((row,i)=><g>
+<text class="algorithm-label" x="85" y={34+i*23} text-anchor="end">{row.label}</text>
+<rect x="94" y={23+i*23} width={formatX(row.impressions)-94} height="15" fill={i===0?'#00689d':i===1?'#0a97d9':'#adc5d3'}/>
+<text class="algorithm-value" x={formatX(row.impressions)+5} y={35+i*23}>{Math.round(row.impressions).toLocaleString('en-GB')}</text>
+<text class:list={['algorithm-value',{'algorithm-best':row.comments===2.8}]} x="306" y={35+i*23} text-anchor="end">{row.comments.toFixed(2)}</text>
+</g>)}
 </svg>}
 {plot.kind==='segments'&&<svg viewBox="0 0 320 182" role="group" aria-labelledby={id+'-title '+id+'-desc'}>
-<title id={id+'-title'}>Engagement gains were largest among daily users.</title>
-<desc id={id+'-desc'}>Daily users: 4.07% increase. Weekly users: 3.40%. Monthly users: 1.86%. New members: no statistically significant change. Dashed line: overall increase of 3.52%.</desc>
+<title id={id+'-title'}>Engagement gains were largest among daily readers.</title>
+<desc id={id+'-desc'}>Reader activity groups: daily users, 4.07% increase; weekly users, 3.40%; monthly users, 1.86%; new members, no statistically significant change. Dashed line: overall increase of 3.52%.</desc>
 {[0,2,4].map(value=><g class="algorithm-axis"><line x1={engagementX(value)} y1="24" x2={engagementX(value)} y2="140"/><text x={engagementX(value)} y="158" text-anchor="middle">{value}%</text></g>)}
 <line class="algorithm-overall" x1={engagementX(gain)} y1="22" x2={engagementX(gain)} y2="140" stroke="#19486a" stroke-dasharray="3 3"/>
 <text class="algorithm-overall-label" x={engagementX(gain)} y="13" text-anchor="middle">Overall {gain}%</text>
@@ -33,12 +36,17 @@ const engagementX=value=>87+value/5*178;
 </>}
 </g>)}
 </svg>}
-{plot.kind==='waffle'&&<svg viewBox="0 0 320 182" role="group" aria-labelledby={id+'-title '+id+'-desc'}>
-<title id={id+'-title'}>Views of content classified as AI slop fell by 40%.</title>
-<desc id={id+'-desc'}>Setting views a few weeks earlier to 100, the reported level is 60. Two grids compare the earlier and reported levels; forty outlined squares show the reduction. These are relative views, not counts of posts.</desc>
-{[100,100+gain].map((value,group)=>Array.from({length:100},(_,i)=><rect x={28+group*156+i%10*11} y={22+Math.floor(i/10)*11} width="8" height="8" fill={i<value?(group?'#00689d':'#adc5d3'):'#fff'} stroke={i<value?'none':'#d6a577'} stroke-width="1"/>))}
-<text class="algorithm-label" x="82" y="155" text-anchor="middle">Earlier · 100</text>
-<text class="algorithm-label" x="238" y="155" text-anchor="middle">Reported · {100+gain}</text>
+{plot.kind==='frequency'&&<svg viewBox="0 0 320 182" role="group" aria-labelledby={id+'-title '+id+'-desc'}>
+<title id={id+'-title'}>Higher posting frequency was associated with higher engagement rates within accounts.</title>
+<desc id={id+'-desc'}>Compared with one-post weeks, 2–5 posts were associated with a 0.23 percentage-point difference, 6–10 with 0.76 points, and 11 or more with 1.40 points. These are observational estimates, not predicted gains for Riad.</desc>
+{[0,.5,1,1.5].map(value=><g class="algorithm-axis"><line x1={frequencyX(value)} y1="22" x2={frequencyX(value)} y2="147"/><text x={frequencyX(value)} y="169" text-anchor="middle">{value.toFixed(1)}</text></g>)}
+{plot.rows.map((row,i)=><g>
+<text class="algorithm-label" x="77" y={37+i*32} text-anchor="end">{row.label}</text>
+{row.value===0?<><circle cx="87" cy="32" r="2.5" fill="#526b7a"/><text class="algorithm-no-change" x="96" y="37">Reference</text></>:<>
+<rect x="87" y={25+i*32} width={frequencyX(row.value)-87} height="17" fill={i===1?'#00689d':'#adc5d3'}/>
+<text class="algorithm-value" x={frequencyX(row.value)+6} y={38+i*32}>+{row.value.toFixed(2)}</text>
+</>}
+</g>)}
 </svg>}
 <figcaption>{plot.caption}</figcaption>
 </figure>
