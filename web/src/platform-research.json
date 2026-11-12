@@ -22,11 +22,11 @@
   },
   "algorithmFindings": [
   {
-    "title": "Carousels lead on impressions; single images lead on comments.",
+    "title": "Document carousels lead on impressions; single images lead on comments.",
     "value": "2.4",
     "suffix": "×",
     "metric": "Carousel impressions relative to video",
-    "detail": "Test carousels for explanations that need several steps; keep one-chart posts for discussion. Retain Riad’s to-camera videos, whose results are assessed below.",
+    "detail": "For a report launch, publish the findings as a PDF carousel, with one comparison per page. Multi-image posts averaged 338 impressions versus 1,451 for carousels. Use a single chart or photograph when one image can carry the argument.",
     "source": "metricoolFormats",
     "sourceLabel": "Metricool · personal profiles, Jan–Feb 2026",
     "visual": {
@@ -67,15 +67,15 @@
     }
   },
   {
-    "title": "A ranking model built on past interactions increased engagement.",
+    "title": "LinkedIn’s new ranking model increased engagement most among daily readers.",
     "value": "+3.52",
-    "metric": "Likes, comments and reshares overall",
-    "detail": "These groups describe how often members use LinkedIn. In controlled tests, the model also increased time spent by 2.10%.",
+    "metric": "More likes, comments and reshares with the new model",
+    "detail": "LinkedIn ranks posts using each reader’s viewing and interaction history. For Riad, test follow-ups that answer questions from country teams, donors and technical peers—for example, a cost breakdown after a financing argument, or a country example after a methodology post.",
     "source": "feedSR",
     "sourceLabel": "LinkedIn research · September 2026",
     "visual": {
       "kind": "segments",
-      "caption": "Engagement change by reader activity",
+      "caption": "Engagement change by how often members use LinkedIn",
       "segments": [
         {
           "label": "Daily",
@@ -97,11 +97,11 @@
     }
   },
   {
-    "title": "More frequent posting was associated with higher engagement rates.",
-    "value": "3–4",
+    "title": "Engagement rates were higher in weeks with more posts.",
+    "value": "3.8",
     "suffix": "",
-    "metric": "Original posts per week to plan for Riad",
-    "detail": "Riad averaged 3.8 originals a week across 37 full weeks in 2026. Plan 3–4 consistently and test timing before increasing volume. The frequency study did not show higher reach per post.",
+    "metric": "Riad’s original posts per week in 2026",
+    "detail": "Riad averaged 3.8 originals a week, with individual weeks ranging from zero to 12. Schedule charts and analysis for quieter weeks while keeping mission updates timely. Compare the Wednesday and Friday afternoon slots below with the current schedule before increasing the number of posts.",
     "source": "bufferFrequency",
     "sourceLabel": "Buffer analysis · 94,485 accounts",
     "localEvidence": "Riad: 142 originals · 5 Jan–20 Sep 2026",

@@ -5,13 +5,14 @@ const {base}=Astro.props;
 ---
 <section class="algorithm-context" aria-labelledby="algorithm-title">
 <h2 id="algorithm-title">First: what works on LinkedIn?</h2>
-<p class="algorithm-lead">Format benchmarks, reader activity and a posting schedule to test.</p>
 <div class="algorithm-findings">
 {research.algorithmFindings.map(finding=><article>
+<div class="algorithm-copy">
 <h3>{finding.title}</h3>
-<AlgorithmVisual finding={finding}/>
 <p class="algorithm-detail">{finding.detail}</p>
 <p class="platform-reference"><a href={research.sources[finding.source].url}>{finding.sourceLabel}</a>{finding.localEvidence&&<><br/>{finding.localEvidence}</>}</p>
+</div>
+<AlgorithmVisual finding={finding}/>
 </article>)}
 </div>
 <div class="posting-timing" aria-labelledby="posting-timing-title">
